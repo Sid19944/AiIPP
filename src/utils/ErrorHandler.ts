@@ -28,3 +28,4 @@ export const errorMiddleware = (err: unknown) => {
 
   return NextResponse.json({ success: false, message }, { status: statusCode });
 };
+export default ErrorHandler;

@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
 export interface UserIt extends Document {
   id: string | ObjectId;
-  name: string;
+  username: string;
   email: string;
   password: string;
   isVerified: boolean;
@@ -12,13 +12,14 @@ export interface UserIt extends Document {
 
 const UserSchema: Schema<UserIt> = new Schema(
   {
-    name: {
+    username: {
       type: String,
       required: true,
     },
     email: {
       type: String,
       required: true,
+      match: [/.+\@.+\..+/, "Please fill a valid email address"],
     },
     password: {
       type: String,
