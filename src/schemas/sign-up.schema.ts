@@ -1,6 +1,6 @@
 import z from "zod";
 
-export const userNameSchema = z.string().min(1, { message: "Enter username" });
+export const userNameSchema = z.string().min(4, { message: "Minimun 4 character username" });
 
 export const signUpSchema = z.object({
   username: userNameSchema,
@@ -8,8 +8,9 @@ export const signUpSchema = z.object({
   password: z
     .string()
     .min(8, { message: "minimum 8" })
-    .regex(/[A-Z]/,{message : "At lest one Upper Case"})
-    .regex(/[a-z]/,{message : "At lest one lower case"})
-    .regex(/[0-9]/,{message : "At lest one digit"})
-    .regex(/[!@#$%&]/,{message : "At lest one special char"}),
+    .regex(/[A-Z]/, { message: "At lest one Upper Case" })
+    .regex(/[a-z]/, { message: "At lest one lower case" })
+    .regex(/[0-9]/, { message: "At lest one digit" })
+    .regex(/[!@#$%&]/, { message: "At lest one special char" }),
+  confirmPassword: z.string().min(1, { message: "Enter Confirm Password" }),
 });

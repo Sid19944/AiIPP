@@ -10,9 +10,13 @@ import dbConnect from "@/lib/dbConnect";
 export const POST = WrapAsync(async (req: NextRequest) => {
   await dbConnect();
   const body = await req.json();
-  const { username, email, password } = body;
-  if (!username || !email || !password) {
+  const { username, email, password, confirmPassword } = body;
+  if (!username || !email || !password || !confirmPassword) {
     throw new ErrorHandler("Provide all detail", 400);
+  }
+
+  if (password !== confirmPassword) {
+    throw new ErrorHandler("Password dos't match", 400);
   }
   const userExist = await UserModel.findOne({ email });
 
@@ -47,7 +51,7 @@ export const POST = WrapAsync(async (req: NextRequest) => {
     }
   } else {
     const user = await UserModel.create({
-      username,
+      username: username.toLowerCase(),
       email,
       verifyCode,
       verifyCodeExpiry,
