@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req });
   const url = req.nextUrl;
-  console.log(token);
   if (
     token &&
     (url.pathname.startsWith("/sign-up") || url.pathname.startsWith("/sign-in"))

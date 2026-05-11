@@ -16,14 +16,17 @@ import { Controller, useForm } from "react-hook-form";
 import { Typewriter } from "react-simple-typewriter";
 import z from "zod";
 import axios, { AxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { ApiResponse } from "@/types/ApiResponse";
-import { Loader2 } from "lucide-react";
+import { BadgeCheck, Loader2 } from "lucide-react";
+import { useDebounce } from "@uidotdev/usehooks";
 import { useRouter } from "next/navigation";
 
 function page() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+  const [isUsernameAvailable, setIsUsernameAvailable] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -37,8 +40,10 @@ function page() {
   });
 
   const { watch } = form;
+  const username = watch("username");
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
+  const debounceUsername = useDebounce(username, 500);
 
   const onSubmit = (data: z.infer<typeof signUpSchema>) => {
     setIsLoading(true);
@@ -55,9 +60,33 @@ function page() {
         setIsLoading(false);
         setTimeout(() => {
           router.replace(`/verify/${data.email}`);
-        }, 2000);
+        }, 1500);
       });
   };
+
+  useEffect(() => {
+    if (debounceUsername && debounceUsername.length > 3) {
+      setIsCheckingUsername(true);
+      axios
+        .post<ApiResponse>(`/api/auth/check-username`, {
+          username: debounceUsername,
+        })
+        .then((res) => {
+          toast.success(res.data.message);
+          setIsUsernameAvailable(true);
+        })
+        .catch((err) => {
+          const axiosErr = err as AxiosError<ApiResponse>;
+          toast.error(
+            axiosErr.response?.data.message ?? "Internal server error",
+          );
+          setIsUsernameAvailable(false);
+        })
+        .finally(() => {
+          setIsCheckingUsername(false);
+        });
+    }
+  }, [debounceUsername]);
   return (
     <div
       className="flex h-screen bg-[#13131B] flex-col"
@@ -93,21 +122,33 @@ function page() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="username">Username</FieldLabel>
-                  <Input
-                    {...field}
-                    id="username"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Enter username"
-                    autoComplete="off"
-                    className="bg-[#13131B] border-gray-500 rounded-sm"
-                  />
+                  <FieldLabel
+                    htmlFor="username"
+                    className={`${isUsernameAvailable && "text-[#8082FD]"}`}
+                  >
+                    Username
+                    {isUsernameAvailable && (
+                      <BadgeCheck className="h-5 text-blue-500" />
+                    )}
+                  </FieldLabel>
+                  <div className="flex gap-2 items-center">
+                    <Input
+                      {...field}
+                      id="username"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="Enter username"
+                      autoComplete="off"
+                      className={`bg-[#13131B] border-gray-500 rounded-sm `}
+                    />
+                    {isCheckingUsername && <Loader2 className="animate-spin" />}
+                  </div>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
                 </Field>
               )}
             />
+
             <Controller
               name="email"
               control={form.control}
@@ -181,7 +222,7 @@ function page() {
               >
                 {isLoading ? (
                   <>
-                    <Loader2 />
+                    <Loader2 className="animate-spin" />
                     Creating...
                   </>
                 ) : (

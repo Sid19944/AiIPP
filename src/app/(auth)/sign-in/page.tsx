@@ -45,7 +45,7 @@ function page() {
       toast.error(respo.error);
     } else {
       toast.success("User Sign-in successfully");
-      router.replace("/");
+      router.replace("/dashboard");
     }
     setIsLoading(false);
   };
