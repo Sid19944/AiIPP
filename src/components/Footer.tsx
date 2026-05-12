@@ -1,17 +1,28 @@
 "use client";
 
+import Link from "next/link";
+
 function Footer() {
   return (
-    <div
-      id="footer"
-      className="bg-[#232323] p-3 flex py-5 flex-col md:flex-row gap-3 items-center justify-around"
-    >
-      <div className="flex justify-center items-center gap-2">
-        <img src="logo.png" alt="logo" className="h-8" />
-        <h1 className=" text-xl text-center text-[#8082FD]">PropMaster AI</h1>
+    <footer className="bg-[#07070F] py-8 px-8 flex items-center justify-between flex-wrap gap-4">
+      <div
+        className="font-serif text-lg text-white/60"
+        style={{ fontFamily: "'Instrument Serif',serif" }}
+      >
+        PrepMasterAI
       </div>
-      <p className="flex text-gray-400 flex-wrap sm:gap-3 justify-center items-center text-sm">©2026 PrepMaaster AI. <span> All rights reserved.</span></p>
-    </div>
+      <p className="text-sm text-white/30">
+        © 2026 PrepMasterAI. Built by Siddharth.
+      </p>
+      <div className="flex gap-6">
+        <Link
+          href="https://github.com/Sid19944/AiIPP"
+          className="text-sm text-white/30 hover:text-white/60 transition-colors"
+        >
+          GitHub
+        </Link>
+      </div>
+    </footer>
   );
 }
 

@@ -27,6 +27,7 @@ function page() {
   const [isLoading, setIsLoading] = useState(false);
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
   const [isUsernameAvailable, setIsUsernameAvailable] = useState(false);
+
   const router = useRouter();
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -46,6 +47,10 @@ function page() {
   const debounceUsername = useDebounce(username, 500);
 
   const onSubmit = (data: z.infer<typeof signUpSchema>) => {
+    if (!isUsernameAvailable) {
+      toast.error("Username is not available");
+      return;
+    }
     setIsLoading(true);
     axios
       .post<ApiResponse>("/api/auth/sign-up", data)
@@ -72,7 +77,6 @@ function page() {
           username: debounceUsername,
         })
         .then((res) => {
-          toast.success(res.data.message);
           setIsUsernameAvailable(true);
         })
         .catch((err) => {
@@ -107,7 +111,6 @@ function page() {
             <h1 className="text-2xl font-semibold text-white">
               Create your account
             </h1>
-
             <p className="text-xs">
               <Typewriter
                 words={["Start your journey to interview mastery today."]}
@@ -134,6 +137,10 @@ function page() {
                   <div className="flex gap-2 items-center">
                     <Input
                       {...field}
+                      onChange={(e) =>
+                        field.onChange(e.target.value.toLocaleLowerCase())
+                      }
+                      autoFocus
                       id="username"
                       aria-invalid={fieldState.invalid}
                       placeholder="Enter username"

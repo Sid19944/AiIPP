@@ -20,6 +20,7 @@ import z from "zod";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 function page() {
   const [isLoading, setIsLoading] = useState(false);
@@ -88,6 +89,7 @@ function page() {
                   <Input
                     {...field}
                     id="email"
+                    autoFocus
                     aria-invalid={fieldState.invalid}
                     placeholder="Enter Email ID"
                     autoComplete="off"
@@ -125,7 +127,14 @@ function page() {
                 type="submit"
                 className="w-full cursor-pointer bg-[#aeaff5] text-[#4E44C7] font-semibold font-mono"
               >
-                Sign In
+                {isLoading ? (
+                  <>
+                    <Loader2 className="animate-spin" />
+                    Logging...
+                  </>
+                ) : (
+                  "SIGN IN"
+                )}
               </Button>
               <p className="text-sm text-center px-2">
                 <Link href="/sign-up" className="group">

@@ -1,3 +1,4 @@
+import dbConnect from "@/lib/dbConnect";
 import { UserModel } from "@/models/user.model";
 import { userNameSchema } from "@/schemas/sign-up.schema";
 import ErrorHandler from "@/utils/ErrorHandler";
@@ -5,6 +6,7 @@ import { WrapAsync } from "@/utils/WrapAsync";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = WrapAsync(async (req: NextRequest) => {
+  await dbConnect();
   const { username } = await req.json();
 
   const checkUsernameSchema = userNameSchema.safeParse(username);

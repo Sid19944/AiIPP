@@ -1,76 +1,90 @@
 "use client";
-import { easeInOut, easeOut, motion, useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
-type Process = {
-  step: number;
-  title: string;
-  text: string;
-};
-
-const process: Process[] = [
+const steps = [
   {
-    step: 1,
-    title: "Select Role",
-    text: "Choose from 3 specialized carrer paths and job titles",
+    num: "01",
+    title: "Create account",
+    desc: "Sign up with email, verify with OTP and you're ready to go.",
   },
   {
-    step: 2,
-    title: "Set Difficulty",
-    text: "From intern to executive level, tailor the challenge.",
+    num: "02",
+    title: "Pick your role",
+    desc: "Select job role and difficulty — Easy, Medium, or Hard.",
   },
   {
-    step: 3,
-    title: "Practice",
-    text: "Engage in lifelike video or voice mock interviews.",
+    num: "03",
+    title: "Answer questions",
+    desc: "AI asks real questions. Type your best answer for each one.",
   },
   {
-    step: 4,
-    title: "Get AI Feedback",
-    text: "Receive a comprehensive score and improvement tips.",
+    num: "04",
+    title: "Get feedback",
+    desc: "Instant score breakdown with tips on exactly what to improve.",
   },
 ];
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const },
+  },
+};
+
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+};
 
 function Process() {
   const ref = useRef(null);
   const inViewport = useInView(ref);
   return (
-    <div
-      id="howItWorks"
-      ref={ref}
-      className="bg-[#15151c] flex flex-col p-4 py-8  justify-evenly items-center mt-10"
-    >
-      <h1 className="text-xl sm:text-4xl mb-2">Master the Process</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-10">
-        {process.map((pro, idx) => (
-          <motion.div
-            initial={{ opacity: 0, y: 80 }}
-            animate={inViewport ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: idx * 0.2, ease: easeOut }}
-            whileHover="hoverState"
-            variants={{ hoverState: { y: -5, transition: { duration: 0.2 } } }}
-            key={idx}
-            className="rounded-lg p-3 py5 flex flex-col justify-center items-center bg-[#1e1e32] gap-2 hover:border-[#7676e1] border border-[#15151C]"
-          >
-            <motion.span
-              variants={{
-                hoverState: { scale: 1.3 },
-              }}
-              transition={{ type: "spring", stiffness: 300 }}
-              className="border h-10 w-10 justify-center flex items-center rounded-full border-[#4242c1] text-[#7676e1] font-semibold"
-            >
-              {pro.step}
-            </motion.span>
-            <span className="text-xl font-semibold text-[#7676e1]">
-              {pro.title}
-            </span>
-            <span className="text-sm text-gray-400 text-center">
-              {pro.text}
-            </span>
-          </motion.div>
-        ))}
+    <section id="how-it-works" className="py-24 px-6 bg-[#0A0A0F]">
+      <div className="max-w-5xl mx-auto">
+        <p className="text-xs font-semibold text-[rgba(108,99,255,0.8)] tracking-[2px] uppercase mb-3">
+          Process
+        </p>
+        <h2
+          className="font-serif text-4xl md:text-5xl text-white mb-4"
+          style={{ fontFamily: "'Instrument Serif',serif" }}
+        >
+          Up and running in minutes
+        </h2>
+        <p className="text-white/40 max-w-md leading-relaxed mb-14">
+          Four simple steps from signup to your first AI-evaluated mock
+          interview.
+        </p>
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="grid md:grid-cols-4 gap-6"
+        >
+          {steps.map((s, i) => (
+            <motion.div key={s.num} variants={fadeUp} className="relative">
+              {i < steps.length - 1 && (
+                <span className="hidden md:block absolute right-0 top-6 text-white/20 text-xl">
+                  →
+                </span>
+              )}
+              <div
+                className="font-serif text-4xl text-[#6C63FF] opacity-60 mb-3"
+                style={{ fontFamily: "'Instrument Serif',serif" }}
+              >
+                {s.num}
+              </div>
+              <h4 className="font-semibold text-white mb-2">{s.title}</h4>
+              <p className="text-sm text-white/40 leading-relaxed">{s.desc}</p>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
-    </div>
+    </section>
   );
 }
 
