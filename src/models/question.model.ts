@@ -7,7 +7,7 @@ interface QuestionsIt extends Document {
   difficulty: string;
   topic: string;
   idealAnswer: string;
-  tags: string[];
+  tips: string[];
 }
 
 const QuestionsSchema: Schema<QuestionsIt> = new Schema(
@@ -17,11 +17,7 @@ const QuestionsSchema: Schema<QuestionsIt> = new Schema(
     difficulty: String,
     topic: String,
     idealAnswer: String,
-    tags: [
-      {
-        tag: String,
-      },
-    ],
+    tips: [String],
   },
   { timestamps: true },
 );

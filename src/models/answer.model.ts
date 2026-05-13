@@ -19,10 +19,12 @@ const AnswerSchema: Schema<AnswerIt> = new Schema({
   session: {
     type: Schema.Types.ObjectId,
     ref: "Session",
+    required: [true, "Enter session id"],
   },
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",
+    required: [true, "Enter user id"],
   },
   question: String,
   userAnswer: String,
@@ -30,8 +32,8 @@ const AnswerSchema: Schema<AnswerIt> = new Schema({
   accuracy: Number,
   depth: Number,
   clarity: Number,
+  tips: [String],
   feedback: String,
-  tips: [],
 });
 
 export const AnswerModel =

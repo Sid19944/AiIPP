@@ -1,4 +1,5 @@
 "use client";
+import { Zap } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -8,7 +9,7 @@ function AuthNav() {
   return (
     <nav className="text-white sticky top-0 bg-[#232423] justify-between flex px-2 items-center py-2">
       <Link href="/" className="flex gap-1 items-center">
-        <img src="logo.png" className="h-8" alt="logo" />
+        <Zap />
         <span className="font-semibold text-sm md:text-lg text-[#8082FD]">
           PrepMaster AI
         </span>

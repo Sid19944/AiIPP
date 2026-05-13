@@ -6,6 +6,7 @@ interface SessionIt extends Document {
   role: string;
   difficulty: string;
   totalScore: number;
+  isCompleted: boolean;
   totalQuestions: number;
   completedAt: Date;
 }
@@ -19,7 +20,7 @@ const SessionSchema: Schema<SessionIt> = new Schema(
     },
     role: {
       type: String,
-      enum: ["frontend", "backend", "fullstack", "dsa"],
+      enum: ["frontend", "backend", "fullstack", "dsa", "system-design"],
       required: [true, "Enter Role"],
     },
     difficulty: {
@@ -29,15 +30,18 @@ const SessionSchema: Schema<SessionIt> = new Schema(
     },
     totalScore: {
       type: Number,
-      required: true,
+      default: 0,
     },
     totalQuestions: {
       type: Number,
-      required: true,
+      default: 0,
+    },
+    isCompleted: {
+      type: Boolean,
+      default: false,
     },
     completedAt: {
       type: Date,
-      required: [true, "Enter completed date-time"],
     },
   },
   { timestamps: true },

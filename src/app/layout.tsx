@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "@/lib/ReduxProvider";
 import { Toaster } from "react-hot-toast";
+import AuthProvider from "@/context/AuthProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,10 +32,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        <ReduxProvider>
-          {children}
-          <Toaster reverseOrder={false} position="top-center" />
-        </ReduxProvider>
+        <AuthProvider>
+          <ReduxProvider>
+            {children}
+            <Toaster reverseOrder={false} position="top-center" />
+          </ReduxProvider>
+        </AuthProvider>
       </body>
     </html>
   );

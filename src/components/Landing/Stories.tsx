@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-
+import {fadeUp, stagger} from "@/lib/animation"
 type Testimonials = {
   text: string;
   name: string;
@@ -9,7 +9,7 @@ type Testimonials = {
   initials: string;
 };
 
-const testimonials : Testimonials[] = [
+const testimonials: Testimonials[] = [
   {
     text: "The AI feedback is incredibly detailed. It told me exactly what I was missing — things a real interviewer would notice. Got an offer at a product company after 2 weeks.",
     name: "Rahul Sharma",
@@ -48,20 +48,6 @@ const testimonials : Testimonials[] = [
   },
 ];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const },
-  },
-};
-
-const stagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } },
-};
-
 function Stories() {
   return (
     <section className="py-24 px-6">
@@ -97,9 +83,7 @@ function Stories() {
                 &quot;{t.text}&quot;
               </p>
               <div className="flex items-center gap-3">
-                <div
-                  className="w-9 h-9 rounded-full bg-[#6C63FF] flex items-center justify-center text-white text-xs font-semibold flex-shrink-0"
-                >
+                <div className="w-9 h-9 rounded-full bg-[#6C63FF] flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
                   {t.initials}
                 </div>
                 <div>

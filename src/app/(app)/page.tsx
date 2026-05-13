@@ -8,6 +8,7 @@ import Roles from "@/components/Landing/Roles";
 import Stories from "@/components/Landing/Stories";
 import Cta from "@/components/Landing/Cta";
 import LandingNavBar from "@/components/NavBars/LandingNavBar";
+import Footer from "@/components/Footer";
 
 export default function LandingPage() {
   return (
@@ -20,6 +21,7 @@ export default function LandingPage() {
       <Roles />
       <Stories />
       <Cta />
+      <Footer/>
     </div>
   );
 }
