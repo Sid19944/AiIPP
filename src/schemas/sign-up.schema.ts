@@ -1,6 +1,9 @@
 import z from "zod";
 
-export const userNameSchema = z.string().min(4, { message: "Minimun 4 character username" });
+export const userNameSchema = z
+  .string()
+  .min(4, { message: "Minimun 4 character username" })
+  .max(8, { message: "Max 8 character username" });
 
 export const signUpSchema = z.object({
   username: userNameSchema,

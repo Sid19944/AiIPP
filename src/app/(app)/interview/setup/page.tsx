@@ -3,15 +3,11 @@
 import ChooseRole from "@/components/interview-setup/ChooseRole";
 import { ArrowLeft, ArrowRight, MoveLeft, Zap, ZapIcon } from "lucide-react";
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import ChooseDifficulty from "@/components/interview-setup/ChooseDifficulty";
+import SetUpNav from "@/components/NavBars/SetUpNav";
 
-interface InterviewInfo {
-  role: string;
-  difficulty: string;
-  questionCount: number;
-}
 function StepIndicator({ current, total }: { current: number; total: number }) {
   return (
     <div className="flex items-center gap-2 z-1">
@@ -44,8 +40,14 @@ const stepHeaders = [
   { title: "Ready to start", subs: "Review your setup and begin" },
 ];
 
+const slideIn = {
+  hidden: { opacity: 0, x: 20 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.35 } },
+  exit: { opacity: 0, x: -20, transition: { duration: 0.2 } },
+};
+
 function page() {
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(1);
   const totalSteps = 3;
   const [selectedRole, setSelectedRole] = useState<string>("frontend");
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("easy");
@@ -53,24 +55,11 @@ function page() {
 
   return (
     <div className="min-h-screen bg-[#08080F] text-gray-500 ">
-      <nav
-        className="flex border-b border-white/8 p-5 sticky top-0 bg-black/80 backdrop-blur "
-        style={{ fontFamily: "'DM Sans', sans-serif" }}
-      >
-        <Link href="/dashboard" className="flex gap-2 font-bold w-1/2 items-center text-gray-400 hover:text-gray-200">
-          <ArrowLeft /> <span>Dashboard</span>
-        </Link>
-        <div className="text-white flex gap-2 items-center">
-          <div className="p-1 rounded-xl bg-[#6C63FF]">
-            <Zap />
-          </div>
-          PrepMasterAI
-        </div>
-      </nav>
+      <SetUpNav />
 
       <div
         id="main"
-        className=" flex flex-col max-w-2xl m-auto mt-10 gap-5 p-4"
+        className=" flex flex-col max-w-2xl m-auto mt-10 gap-5 p-4 pb-0"
       >
         <motion.div id="header" className="flex flex-col gap-3">
           <div className="flex gap-4 justify-center items-center">
@@ -79,31 +68,59 @@ function page() {
               Step {step + 1} of {totalSteps + 1}
             </span>
           </div>
-
-          <motion.div
-            initial={{ x: 40, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            className="flex flex-col gap-2 justify-center items-center"
-          >
-            <h1 className="text-4xl md:text-5xl text-white font-bold text-center">
-              {stepHeaders[step].title}
-            </h1>
-            <p
-              style={{ fontFamily: "'DM Sans', sans-serif" }}
-              className="text-center"
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              variants={slideIn}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="flex flex-col gap-2 justify-center items-center"
             >
-              {stepHeaders[step].subs}
-            </p>
-          </motion.div>
+              <h1 className="text-4xl md:text-5xl text-white font-bold text-center">
+                {stepHeaders[step].title}
+              </h1>
+              <p
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
+                className="text-center"
+              >
+                {stepHeaders[step].subs}
+              </p>
+            </motion.div>
+          </AnimatePresence>
         </motion.div>
 
-        {step === 0 && (
-          <ChooseRole
-            setSelectedRole={setSelectedRole}
-            selectedRole={selectedRole}
-          />
-        )}
+        <AnimatePresence mode="wait">
+          {step === 0 && (
+            <motion.div
+              key={step}
+              variants={slideIn}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              <ChooseRole
+                setSelectedRole={setSelectedRole}
+                selectedRole={selectedRole}
+              />
+            </motion.div>
+          )}
+
+          {step == 1 && (
+            <motion.div
+              key={step}
+              variants={slideIn}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              <ChooseDifficulty
+                selectedDifficulty={selectedDifficulty}
+                setSelectedDifficulty={setSelectedDifficulty}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div
           id="navigation"
@@ -114,7 +131,7 @@ function page() {
             animate={{ x: 0 }}
             transition={{ duration: 0.4 }}
             onClick={() => setStep(step - 1)}
-            className={`cursor-pointer border border-white/15 flex transition-all duration-200 text-white/15 hover:border-white/50 hover:text-white/50 gap-2 px-3 py-2 rounded-lg ${step === 0 ? "opacity-0 pointer-events-none" : ""} active:border-white/50`}
+            className={`cursor-pointer border border-white/15 flex transition-all duration-200 text-white/15 hover:border-white/50 hover:text-white/50 gap-2 px-3 py-2 rounded-lg ${step === 0 ? "opacity-0 pointer-events-none" : ""} active:border-white/50 active:text-white/50`}
           >
             <ArrowLeft />
             Back

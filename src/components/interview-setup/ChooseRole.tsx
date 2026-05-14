@@ -96,7 +96,7 @@ function ChooseRole({
             variants={fadeUp}
             initial="hidden"
             animate="visible"
-            className={` flex cursor-pointer flex-col border p-5 rounded-2xl text-gray-600 relatice text-left transition-all duration-200 group overflow-hidden gap-3 ${
+            className={`flex relative cursor-pointer flex-col border p-5 rounded-2xl text-gray-600 relatice text-left transition-all duration-200 group overflow-hidden gap-3 ${
               selectedRole == r.id
                 ? "border-opacity-100"
                 : "border-white/8 hover:border-white/15 hover:scale-[1.01]"
@@ -107,8 +107,13 @@ function ChooseRole({
               borderColor: selectedRole === r.id ? r.border : "",
             }}
           >
+
+            {
+              selectedRole === r.id && <div className="absolute inset-0 opacity-30 rounded-2xl "
+              style={{background : `radial-gradient(circle at 75% 0%, ${r.color}, transparent 50%)`}}/>
+            }
             <div className={`text-3xl flex justify-between`}>
-              {r.emoji}
+              {r.emoji} 
               {selectedRole === r.id && (
                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
                   <CheckCircle2 size={15} style={{ color: r.color }} />
