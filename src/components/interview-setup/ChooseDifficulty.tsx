@@ -45,7 +45,7 @@ function ChooseDifficulty({
   setSelectedDifficulty,
 }: {
   selectedDifficulty: string;
-  setSelectedDifficulty: (id: string) => void;
+  setSelectedDifficulty: (newDiff: string) => void;
 }) {
   return (
     <motion.div

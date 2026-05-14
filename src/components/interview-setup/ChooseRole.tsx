@@ -79,7 +79,7 @@ function ChooseRole({
   setSelectedRole,
 }: {
   selectedRole: string;
-  setSelectedRole: (id: string) => void;
+  setSelectedRole: (newRole: string) => void;
 }) {
   return (
     <motion.div

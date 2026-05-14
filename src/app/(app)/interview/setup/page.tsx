@@ -7,6 +7,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import ChooseDifficulty from "@/components/interview-setup/ChooseDifficulty";
 import SetUpNav from "@/components/NavBars/SetUpNav";
+import { fadeUp } from "@/lib/animation";
+import ChooseQuestionCount from "@/components/interview-setup/ChooseQuestionCount";
 
 function StepIndicator({ current, total }: { current: number; total: number }) {
   return (
@@ -47,7 +49,7 @@ const slideIn = {
 };
 
 function page() {
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(0);
   const totalSteps = 3;
   const [selectedRole, setSelectedRole] = useState<string>("frontend");
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("easy");
@@ -118,6 +120,18 @@ function page() {
                 selectedDifficulty={selectedDifficulty}
                 setSelectedDifficulty={setSelectedDifficulty}
               />
+            </motion.div>
+          )}
+
+          {step == 2 && (
+            <motion.div
+              key={step}
+              variants={slideIn}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+             <ChooseQuestionCount questionCount={questionCount} setQuestioinCount={setQuestioinCount}/> 
             </motion.div>
           )}
         </AnimatePresence>
