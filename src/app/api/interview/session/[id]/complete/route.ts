@@ -8,11 +8,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 interface DataIt {
   totalScore: number;
-  totalQuestios: number;
+  totalQuestions: number;
 }
 
 export const PUT = WrapAsync(
-  async (req: NextRequest, { params }: { params: { id: string } }) => {
+  async (req: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
     await dbConnect();
 
     const { id } = await params;
@@ -30,7 +30,7 @@ export const PUT = WrapAsync(
       { $match: { session: new mongoose.Types.ObjectId(id) } },
       {
         $group: {
-          _id: "$session",
+          _id: null,
           totalScore: { $avg: "$score" },
           totalQuestions: { $sum: 1 },
         },
@@ -43,9 +43,11 @@ export const PUT = WrapAsync(
       },
     ]);
 
-    findSession.totalScore = data[0].totalScore;
-    findSession.totalQuestions = data[0].totalQuestios;
-    findSession.completedAt = new Date(Date.now());
+    const scores = data[0] || { totalScore: 0, totalQuestions: 0 };
+
+    findSession.totalScore = scores.totalScore || 0;
+    findSession.totalQuestions = scores.totalQuestions || 0;
+    findSession.completedAt = new Date();
     findSession.isCompleted = true;
     await findSession.save();
 

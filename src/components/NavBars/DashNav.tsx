@@ -47,7 +47,7 @@ function DashNav() {
           </button>
           <div>
             <h1 className="hidden md:flex">Dashboard</h1>
-            <p className="text-[10px] md:text-xs text-gray-500">Welcome back, {user?.username} 👋</p>
+            <p className="text-xs text-gray-500">Welcome back, {user?.username}👋</p>
           </div>
         </div>
         <Link

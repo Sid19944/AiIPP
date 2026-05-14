@@ -19,12 +19,12 @@ function LandingNavBar() {
         {showNav ? (
           <X
             onClick={() => setShowNav(!showNav)}
-            className="sm:hidden cursor-pointer"
+            className="md:hidden cursor-pointer"
           />
         ) : (
           <Menu
             onClick={() => setShowNav(!showNav)}
-            className="sm:hidden cursor-pointer"
+            className="md:hidden cursor-pointer"
           />
         )}
       </div>
@@ -41,7 +41,7 @@ function LandingNavBar() {
         ))}
       </div>
 
-      <div className="sm:flex items-center gap-3 hidden">
+      <div className="md:flex items-center gap-3 hidden">
         <Link
           href="/sign-in"
           className="text-sm px-4 py-2 rounded-full border border-[#E4E4EF] hover:border-[#6C63FF] hover:text-[#6C63FF] transition-all"

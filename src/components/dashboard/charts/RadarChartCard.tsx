@@ -26,11 +26,12 @@ function Radarchart() {
   return (
     <motion.div
       custom={1}
+      id="topic"
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className="lg:col-span-2 bg-[#0D0D14] border border-white/5 rounded-2xl p-5"
+      className="bg-[#0D0D14] border border-white/5 rounded-2xl p-5"
     >
       <div className="mb-4">
         <h3 className="text-white font-semibold text-sm">Topic coverage</h3>
