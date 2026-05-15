@@ -1,9 +1,9 @@
 "use client";
 
 import { fadeUp } from "@/lib/animation";
+import { Role } from "@/types/interfaces/Role";
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
-import { useState } from "react";
 
 const roles = [
   {
@@ -78,8 +78,8 @@ function ChooseRole({
   selectedRole,
   setSelectedRole,
 }: {
-  selectedRole: string;
-  setSelectedRole: (newRole: string) => void;
+  selectedRole: Role | null;
+  setSelectedRole: (newRole: Role) => void;
 }) {
   return (
     <motion.div
@@ -92,35 +92,38 @@ function ChooseRole({
           <motion.button
             key={r.id}
             custom={i}
-            onClick={() => setSelectedRole(r.id)}
+            onClick={() => setSelectedRole(r)}
             variants={fadeUp}
             initial="hidden"
             animate="visible"
             className={`flex relative cursor-pointer flex-col border p-5 rounded-2xl text-gray-600 relatice text-left transition-all duration-200 group overflow-hidden gap-3 ${
-              selectedRole == r.id
+              selectedRole?.id == r.id
                 ? "border-opacity-100"
                 : "border-white/8 hover:border-white/15 hover:scale-[1.01]"
             }`}
             style={{
               background:
-                selectedRole === r.id ? r.bg : "rgba(255,255,255,0.02)",
-              borderColor: selectedRole === r.id ? r.border : "",
+                selectedRole?.id === r.id ? r.bg : "rgba(255,255,255,0.02)",
+              borderColor: selectedRole?.id === r.id ? r.border : "",
             }}
           >
-
-            {
-              selectedRole === r.id && <div className="absolute inset-0 opacity-30 rounded-2xl "
-              style={{background : `radial-gradient(circle at 75% 0%, ${r.color}, transparent 50%)`}}/>
-            }
+            {selectedRole?.id === r.id && (
+              <div
+                className="absolute inset-0 opacity-30 rounded-2xl "
+                style={{
+                  background: `radial-gradient(circle at 75% 0%, ${r.color}, transparent 50%)`,
+                }}
+              />
+            )}
             <div className={`text-3xl flex justify-between`}>
-              {r.emoji} 
-              {selectedRole === r.id && (
+              {r.emoji}
+              {selectedRole?.id === r.id && (
                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
                   <CheckCircle2 size={15} style={{ color: r.color }} />
                 </motion.div>
               )}
             </div>
-            <span className="text-sm md:text-lg text-white font-semibold ">
+            <span className="text-sm md:text-lg text-white font-semibold text-shadow-[0_0_10px_white]">
               {r.label}
             </span>
             <p className="tracking-tight text-xs md:text-sm">{r.desc}</p>

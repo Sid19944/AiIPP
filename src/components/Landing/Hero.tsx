@@ -86,7 +86,7 @@ function Hero() {
         className="flex items-center gap-4 flex-wrap justify-center mb-12"
       >
         <Link
-          href="/sign-up"
+          href="/sign-in"
           className="flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#0A0A0F] text-white
           font-medium hover:bg-[#6C63FF] transition-all hover:-translate-y-0.5
           hover:shadow-[0_8px_24px_rgba(108,99,255,0.3)]"

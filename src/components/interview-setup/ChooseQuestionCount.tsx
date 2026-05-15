@@ -1,15 +1,9 @@
 "use client";
 
 import { fadeUp } from "@/lib/animation";
+import { Counts } from "@/types/interfaces/Counts";
 import { motion } from "framer-motion";
 import { CheckCircle2, Clock, Info } from "lucide-react";
-
-interface Counts {
-  id: number;
-  qs: number;
-  desc: string;
-  time: string;
-}
 
 const questionCounts: Counts[] = [
   {
@@ -36,8 +30,8 @@ function ChooseQuestionCount({
   questionCount,
   setQuestioinCount,
 }: {
-  questionCount: number;
-  setQuestioinCount: (count: number) => void;
+  questionCount: Counts | null;
+  setQuestioinCount: (count: Counts) => void;
 }) {
   return (
     <motion.div
@@ -50,14 +44,14 @@ function ChooseQuestionCount({
           <motion.div
             key={q.id}
             custom={i}
-            onClick={() => setQuestioinCount(q.id)}
+            onClick={() => setQuestioinCount(q)}
             variants={fadeUp}
             initial="hidden"
             animate="visible"
-            className={`transition-all duration-200 cursor-pointer relative p-5 flex flex-col gap-2 rounded-2xl justify-center items-center border border-white/8 ${questionCount === q.id ? "bg-[#413d8e]" : "bg-[rgba(255,255,255,0.02)] hover:border-white/50 hover:scale-[1.01]"}`}
-            style={{ borderColor: questionCount === q.id ? "#6c65eb" : "" }}
+            className={`transition-all duration-200 cursor-pointer relative p-5 flex flex-col gap-2 rounded-2xl justify-center items-center border border-white/8 ${questionCount?.id === q.id ? "bg-[#413d8e]" : "bg-[rgba(255,255,255,0.02)] hover:border-white/50 hover:scale-[1.01]"}`}
+            style={{ borderColor: questionCount?.id === q.id ? "#6c65eb" : "" }}
           >
-            {questionCount === q.id && (
+            {questionCount?.id === q.id && (
               <div
                 className="absolute inset-0 rounded-2xl opacity-50"
                 style={{
@@ -66,7 +60,7 @@ function ChooseQuestionCount({
               />
             )}
 
-            {questionCount === q.id && (
+            {questionCount?.id === q.id && (
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -76,7 +70,7 @@ function ChooseQuestionCount({
               </motion.div>
             )}
             <span
-              className={`text-4xl font-serif font-semibold ${questionCount === q.id ? "text-[#9f9afd]" : "text-white"}`}
+              className={`text-4xl font-serif font-semibold ${questionCount?.id === q.id ? "text-[#ffffff] text-shadow-[0_0_10px]" : "text-white text-shadow-[0_0_10px_white]"}`}
             >
               {q.qs}
             </span>

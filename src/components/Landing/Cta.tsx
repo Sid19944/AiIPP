@@ -24,7 +24,7 @@ function Cta() {
           Start practicing for free. No credit card required.
         </p>
         <Link
-          href="/sign-up"
+          href="/sign-in"
           className="inline-flex items-center gap-2 px-10 py-4 rounded-full bg-[#6C63FF] text-white font-medium text-lg hover:bg-[#5B52EE] transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(108,99,255,0.4)]"
         >
           Start practicing free <ArrowRight size={18} />

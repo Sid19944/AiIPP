@@ -1,14 +1,16 @@
 "use client";
 
 import ChooseRole from "@/components/interview-setup/ChooseRole";
-import { ArrowLeft, ArrowRight, MoveLeft, Zap, ZapIcon } from "lucide-react";
+import { ArrowLeft, ArrowRight, ZapIcon } from "lucide-react";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
 import ChooseDifficulty from "@/components/interview-setup/ChooseDifficulty";
 import SetUpNav from "@/components/NavBars/SetUpNav";
-import { fadeUp } from "@/lib/animation";
 import ChooseQuestionCount from "@/components/interview-setup/ChooseQuestionCount";
+import { Role } from "@/types/interfaces/Role";
+import { Difficulty } from "@/types/interfaces/Difficulty";
+import { Counts } from "@/types/interfaces/Counts";
+import ReadyToStart from "@/components/interview-setup/ReadyToStart";
 
 function StepIndicator({ current, total }: { current: number; total: number }) {
   return (
@@ -49,11 +51,17 @@ const slideIn = {
 };
 
 function page() {
-  const [step, setStep] = useState<number>(0);
+  const [step, setStep] = useState<number>(3);
   const totalSteps = 3;
-  const [selectedRole, setSelectedRole] = useState<string>("frontend");
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("easy");
-  const [questionCount, setQuestioinCount] = useState<number>(5);
+  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const [selectedDifficulty, setSelectedDifficulty] =
+    useState<Difficulty | null>(null);
+  const [questionCount, setQuestioinCount] = useState<Counts | null>(null);
+
+  const canNext =
+    (step === 0 && selectedRole) ||
+    (step === 1 && selectedDifficulty) ||
+    (step === 2 && questionCount);
 
   return (
     <div className="min-h-screen bg-[#08080F] text-gray-500 ">
@@ -131,7 +139,27 @@ function page() {
               animate="visible"
               exit="exit"
             >
-             <ChooseQuestionCount questionCount={questionCount} setQuestioinCount={setQuestioinCount}/> 
+              <ChooseQuestionCount
+                questionCount={questionCount}
+                setQuestioinCount={setQuestioinCount}
+              />
+            </motion.div>
+          )}
+          {step == 3 && (
+            <motion.div
+              key={step}
+              variants={slideIn}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              <ReadyToStart
+              step={step}
+              setStep={setStep}
+              role={selectedRole}
+              difficulty={selectedDifficulty}
+              count={questionCount} 
+              />
             </motion.div>
           )}
         </AnimatePresence>
@@ -153,11 +181,12 @@ function page() {
 
           {step < totalSteps ? (
             <motion.button
+              disabled={!canNext}
               initial={{ x: 25 }}
               animate={{ x: 0 }}
               transition={{ duration: 0.4 }}
               onClick={() => setStep(step + 1)}
-              className={`cursor-pointer bg-[#6C63FF] flex transition-all duration-200 text-white gap-2 px-3 py-2 rounded-lg hover:bg-[#5048f4] hover:shadow-[0_5px_24px__#6C63FF]  hover:-translate-y-0.5 active:bg-[#5048f4]`}
+              className={` flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-medium transition-all ${canNext ? "cursor-pointer  bg-[#6C63FF] text-white hover:bg-[#5048f4] hover:-translate-y-0.5 hover:shadow-[0_5px_24px__#6C63FF] active:bg-[#5048f4]" : "cursor-not-allowed bg-white/5 text-white/20"}`}
             >
               Continue
               <ArrowRight />
@@ -168,10 +197,10 @@ function page() {
               animate={{ x: 0 }}
               transition={{ duration: 0.4 }}
               onClick={() => console.log("Start")}
-              className={`cursor-pointer bg-[#6C63FF] flex transition-all duration-200 text-white gap-2 px-3 py-2 rounded-lg hover:bg-[#5048f4] hover:shadow-[0_5px_24px__#6C63FF]  hover:-translate-y-0.5 active:bg-[#5048f4]`}
+              className={`cursor-pointer bg-[#6C63FF] flex transition-all duration-200 text-white gap-2 px-3 py-2 rounded-lg hover:bg-[#5048f4] hover:shadow-[0_5px_24px__#6C63FF]  hover:-translate-y-0.5 active:bg-[#5048f4] items-center`}
             >
               <ZapIcon />
-              <span>Start Interview </span>
+              <span className="text-xs">Start Interview </span>
               <ArrowRight />
             </motion.button>
           )}

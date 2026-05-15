@@ -1,8 +1,9 @@
 "use client";
 
 import { fadeUp } from "@/lib/animation";
+import { Difficulty } from "@/types/interfaces/Difficulty";
 import { motion } from "framer-motion";
-import { Brain, CheckCircle2, Clock, Flame, Shield, Watch } from "lucide-react";
+import { Brain, CheckCircle2, Clock, Flame, Shield } from "lucide-react";
 
 const difficulties = [
   {
@@ -44,8 +45,8 @@ function ChooseDifficulty({
   selectedDifficulty,
   setSelectedDifficulty,
 }: {
-  selectedDifficulty: string;
-  setSelectedDifficulty: (newDiff: string) => void;
+  selectedDifficulty: Difficulty | null;
+  setSelectedDifficulty: (newDiff: Difficulty) => void;
 }) {
   return (
     <motion.div
@@ -57,21 +58,22 @@ function ChooseDifficulty({
         {difficulties.map((diff, i) => (
           <motion.div
             key={diff.id}
-            onClick={() => setSelectedDifficulty(diff.id)}
+            onClick={() => setSelectedDifficulty(diff)}
             custom={i}
             variants={fadeUp}
             initial="hidden"
             animate="visible"
-            className={`flex relative cursor-pointer flex-col border p-5 rounded-2xl relatice text-left transition-all duration-200 overflow-hidden gap-3 ${selectedDifficulty === diff.id ? "border-opacity-100" : "border-white/8 hover:border-white/15 hover:scale-[1.01]"}`}
+            className={`flex relative cursor-pointer flex-col border p-5 rounded-2xl relatice text-left transition-all duration-200 overflow-hidden gap-3 ${selectedDifficulty?.id === diff.id ? "border-opacity-100" : "border-white/8 hover:border-white/15 hover:scale-[1.01]"}`}
             style={{
               background:
-                selectedDifficulty === diff.id
+                selectedDifficulty?.id === diff.id
                   ? diff.bg
                   : "rgba(255,255,255,0.02)",
-              borderColor: selectedDifficulty === diff.id ? diff.border : "",
+              borderColor:
+                selectedDifficulty?.id === diff.id ? diff.border : "",
             }}
           >
-            {selectedDifficulty === diff.id && (
+            {selectedDifficulty?.id === diff.id && (
               <div
                 className="absolute inset-0 opacity-30 rounded-2xl"
                 style={{
@@ -83,7 +85,7 @@ function ChooseDifficulty({
             <div className="flex flex-col gap-5">
               <div className="flex justify-between">
                 <div
-                  className={`w-fit p-2 rounded-xl ${selectedDifficulty === diff.id && ""}`}
+                  className={`w-fit p-2 rounded-xl ${selectedDifficulty?.id === diff.id && ""}`}
                   style={{
                     background: diff.bg,
                     border: `1px solid ${diff.color}50`,
@@ -91,7 +93,7 @@ function ChooseDifficulty({
                 >
                   <diff.icon style={{ color: diff.color }} />
                 </div>
-                {selectedDifficulty === diff.id && (
+                {selectedDifficulty?.id === diff.id && (
                   <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
                     <CheckCircle2 style={{ color: diff.color }} />
                   </motion.div>
@@ -106,7 +108,7 @@ function ChooseDifficulty({
             </div>
 
             <div className="flex flex-col gap-2">
-              <h1 className="text-white text-xl font-serif font-semibold">
+              <h1 className="text-white text-xl font-serif font-semibold text-shadow-[0_0_10px_white]">
                 {diff.label}
               </h1>
               <span>{diff.desc}</span>
