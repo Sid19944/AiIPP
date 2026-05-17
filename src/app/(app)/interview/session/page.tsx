@@ -1,7 +1,20 @@
 "use client";
 
 import { useCompletion } from "@ai-sdk/react";
-import { Sparkles, Send, SkipForward, Loader2 } from "lucide-react";
+import {
+  Sparkles,
+  Send,
+  SkipForward,
+  Loader2,
+  Check,
+  X,
+  Lightbulb,
+  ForwardIcon,
+  Forward,
+  StepForward,
+  ArrowBigRight,
+  ArrowRight,
+} from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -15,6 +28,7 @@ import EvaluatingLoadingDiv from "@/components/interview-session/EvaluatingLoadi
 import CountUp from "react-countup";
 import RadialScore from "@/components/interview-session/RadialScore";
 import Brackdown from "@/components/interview-session/Brackdown";
+import { AnswerFeedback } from "@/types/interfaces/AnswerFeedback";
 
 export default function InterviewQuestionGenerator() {
   const searchParams = useSearchParams();
@@ -27,7 +41,7 @@ export default function InterviewQuestionGenerator() {
   const [displayedText, setDisplayedText] = useState<string>("");
   const [currSession, setCurrSession] = useState<string | null>(null);
   const [evaluatingAns, setEvaluatingAns] = useState(false);
-  const [ansFeedback, setAnsFeedback] = useState(null);
+  const [ansFeedback, setAnsFeedback] = useState<AnswerFeedback | null>(null);
   const [qCount, setQCount] = useState(1);
 
   const { completion, complete } = useCompletion({
@@ -74,7 +88,7 @@ export default function InterviewQuestionGenerator() {
     });
   }, [role, difficulty, topic]);
 
-  const handleAnswerSubmit = useCallback(() => {
+  const handleAnswerSubmit = () => {
     setAnsFeedback(null);
     setEvaluatingAns(true);
     axios
@@ -89,25 +103,15 @@ export default function InterviewQuestionGenerator() {
         setAnsFeedback(res.data.feedback);
       })
       .catch((err) => {
-        const axiosErr = err as AxiosError<ApiResponse>;
-        toast.error(
-          axiosErr?.response?.data.message || "Internal server Error",
-        );
+        toast.error("Failed to evaluate you answer, submit ans again!");
       })
       .finally(() => {
         setEvaluatingAns(false);
       });
-  }, [
-    ansFeedback,
-    evaluatingAns,
-    currSession,
-    displayedText,
-    answer,
-    role,
-    difficulty,
-  ]);
+  };
 
-  console.log(ansFeedback)
+  console.log(ansFeedback);
+  console.log(currSession);
 
   return (
     <div className="w-full min-h-screen mx-auto p-2 md:p-6 space-y-4 bg-[#08080F] text-white">
@@ -137,27 +141,97 @@ export default function InterviewQuestionGenerator() {
         )}
       </div>
 
+      {/* Evaluating loading card */}
+      {evaluatingAns && <EvaluatingLoadingDiv />}
+
       {/* Input Answer div*/}
       {completion && displayedText?.length === completion?.length && (
         <AnsInputDiv
           answer={answer}
+          loading={evaluatingAns}
           setAnswer={setAnswer}
           handleAnswerSubmit={handleAnswerSubmit}
         />
       )}
 
-      {/* Evaluating loading card */}
-      {evaluatingAns && <EvaluatingLoadingDiv />}
-
-      {/* <div className="flex flex-col gap-3">
-        <RadialScore score={80} tQs={counts} currQs={qCount}/>
+      <div className="flex flex-col gap-3">
+        <RadialScore
+          score={ansFeedback?.score || 0}
+          tQs={counts}
+          currQs={qCount}
+        />
 
         <div className="relative border w-full p-5 flex flex-col gap-3 rounded-2xl border-white/8">
-          <Brackdown score={80} label={"Accuracy"} />
-          <Brackdown score={50} label={"Depth"} />
-          <Brackdown score={30} label={"Clarity"} />
+          <Brackdown score={ansFeedback?.accuracy || 0} label={"Accuracy"} />
+          <Brackdown score={ansFeedback?.depth || 0} label={"Depth"} />
+          <Brackdown score={ansFeedback?.clarity || 0} label={"Clarity"} />
         </div>
-      </div> */}
+
+        <div className="border w-full p-5 rounded-2xl border-white/8 gap-5 flex flex-col">
+          <div>
+            <h1 className="text-green-400 font-semibold font-mono">
+              WHAT WAS GOOD
+            </h1>
+            <div className="flex flex-col gap-3">
+              {ansFeedback?.good.map((el, idx) => (
+                <div
+                  className="font-semibold flex gap-1.5 items-center py-1"
+                  key={idx}
+                >
+                  <span>
+                    <Check size={25} style={{ color: "#00ff33" }} />
+                  </span>
+                  <p>{el}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h1 className="text-red-600 font-mono">WHAT WAS MISSING</h1>
+            <div className="flex flex-col gap-3">
+              {ansFeedback?.missing.map((el, idx) => (
+                <div
+                  className="font-semibold flex gap-1.5 items-center\ py-1"
+                  key={idx}
+                >
+                  <span>
+                    <X size={25} style={{ color: "#ff0000" }} />
+                  </span>
+                  <p>{el}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="p-5 flex flex-col bg-[#6C63FF]/30 rounded-2xl border-[#6C63FF]/70 gap-3">
+          <div className="flex gap-2 items-center text-[#6C63FF]">
+            <Lightbulb />
+            <span className="font-semibold font-mono">TIPS TO IMPROVE</span>
+          </div>
+
+          <div>
+            {ansFeedback?.tips.map((el, idx) => (
+              <div className="flex gap-3 items-center" key={idx}>
+                <span className="text-xl text-[#6C63FF] font-mono">
+                  {idx + 1 < 10 && 0}
+                  {idx + 1}
+                </span>
+                <p>{el}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <motion.button
+        whileHover={{ y: -4 }}
+        whileTap={{ y: 2 }}
+        className="border rounded-md border-[#6C63FF] p-2 px-5 bg-[#6C63FF]/40 font-semibold flex gap-3 text-xl items-center cursor-pointer active:bg-[#6C63FF]"
+      >
+        Next Question <ArrowRight />
+      </motion.button>
     </div>
   );
 }

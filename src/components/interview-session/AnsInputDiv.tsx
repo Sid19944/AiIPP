@@ -1,9 +1,19 @@
-'use client'
+"use client";
 import { fadeUp } from "@/lib/animation";
 import { motion } from "framer-motion";
-import { Send, SkipForward } from "lucide-react";
+import { Loader, Loader2, Send, SkipForward } from "lucide-react";
 
-function AnsInputDiv({answer, setAnswer,handleAnswerSubmit} : {answer:string, setAnswer : (newAnd : string)=>void,handleAnswerSubmit : ()=>void}) {
+function AnsInputDiv({
+  answer,
+  setAnswer,
+  handleAnswerSubmit,
+  loading,
+}: {
+  answer: string;
+  setAnswer: (newAnd: string) => void;
+  handleAnswerSubmit: () => void;
+  loading: boolean;
+}) {
   return (
     <motion.div
       variants={fadeUp}
@@ -29,24 +39,35 @@ function AnsInputDiv({answer, setAnswer,handleAnswerSubmit} : {answer:string, se
           )}
         </div>
         <div className="flex gap-3 font-semibold">
-          <motion.button
-            initial={{ y: 0 }}
-            whileHover={{ y: -2 }}
-            className="flex border border-gray-500 text-gray-500 cursor-pointer rounded-md p-1 justify-center items-center gap-2 px-2 hover:text-gray-300 hover:border-gray-300"
-          >
-            <SkipForward />
-            Skip
-          </motion.button>
+          {!loading && (
+            <motion.button
+              initial={{ y: 0 }}
+              whileHover={{ y: -2 }}
+              disabled={loading}
+              className="flex border border-gray-500 text-gray-500 cursor-pointer rounded-md p-1 justify-center items-center gap-2 px-2 hover:text-gray-300 hover:border-gray-300 disabled:pointer-events-none"
+            >
+              <SkipForward />
+              Skip
+            </motion.button>
+          )}
 
           <motion.button
             initial={{ y: 0 }}
             whileHover={{ y: -2 }}
-            disabled={answer.length < 10}
+            disabled={answer.length < 10 || loading}
             onClick={handleAnswerSubmit}
             className={`flex border border-[#6C63FF]/60 bg-[#6C63FF] cursor-pointer disabled:cursor-not-allowed rounded-md p-1 justify-center items-center gap-2 px-2 hover:shadow-[0_5px_24px__#6C63FF] disabled:pointer-events-none  disabled:bg-gray-500 `}
           >
-            <Send />
-            Submit
+            {loading ? (
+              <div className="flex gap-2 items-center">
+                <Loader2 className="animate-spin" /> Evaluating...
+              </div>
+            ) : (
+              <>
+                <Send />
+                Submit
+              </>
+            )}
           </motion.button>
         </div>
       </div>
