@@ -9,8 +9,6 @@ import ErrorHandler from "@/utils/ErrorHandler";
 import dbConnect from "@/lib/dbConnect";
 import { QuestionsModel } from "@/models/question.model";
 
-// export const runtime = "edge";
-
 const EVALUATE_SYSTEM_PROMPT = `You are an expert technical interviewer evaluating a candidate's answer. Analyze the answer and return ONLY a JSON object with this exact structure — no markdown, no extra text: {"score": 75, "accuracy": 80, "depth": 65, "clarity": 85, "good": ["Point 1", "Point 2"], "missing": ["Missing point 1", "Missing point 2"],  "tips": ["Tip 1", "Tip 2", "Tip 3"], "feedback", "idealAnswer"}`;
 
 export const POST = WrapAsync(async (req: NextRequest) => {

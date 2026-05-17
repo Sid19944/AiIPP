@@ -11,6 +11,7 @@ import { Role } from "@/types/interfaces/Role";
 import { Difficulty } from "@/types/interfaces/Difficulty";
 import { Counts } from "@/types/interfaces/Counts";
 import ReadyToStart from "@/components/interview-setup/ReadyToStart";
+import { useRouter } from "next/navigation";
 
 function StepIndicator({ current, total }: { current: number; total: number }) {
   return (
@@ -51,7 +52,8 @@ const slideIn = {
 };
 
 function page() {
-  const [step, setStep] = useState<number>(3);
+  const router = useRouter();
+  const [step, setStep] = useState<number>(0);
   const totalSteps = 3;
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [selectedDifficulty, setSelectedDifficulty] =
@@ -63,8 +65,20 @@ function page() {
     (step === 1 && selectedDifficulty) ||
     (step === 2 && questionCount);
 
+  const handleStart = () => {
+    const params = new URLSearchParams({
+      role: selectedRole?.id as string,
+      difficulty: selectedDifficulty?.id as string,
+      topic: selectedRole?.topics.join(" ") as string,
+    });
+
+    router.push(
+      `/interview/session?${params.toString()}&count=${questionCount?.id}`,
+    );
+  };
+
   return (
-    <div className="min-h-screen bg-[#08080F] text-gray-500 ">
+    <div className="min-h-screen bg-[#08080F] text-gray-500">
       <SetUpNav />
 
       <div
@@ -154,11 +168,11 @@ function page() {
               exit="exit"
             >
               <ReadyToStart
-              step={step}
-              setStep={setStep}
-              role={selectedRole}
-              difficulty={selectedDifficulty}
-              count={questionCount} 
+                step={step}
+                setStep={setStep}
+                role={selectedRole}
+                difficulty={selectedDifficulty}
+                count={questionCount}
               />
             </motion.div>
           )}
@@ -196,7 +210,7 @@ function page() {
               initial={{ x: 25 }}
               animate={{ x: 0 }}
               transition={{ duration: 0.4 }}
-              onClick={() => console.log("Start")}
+              onClick={handleStart}
               className={`cursor-pointer bg-[#6C63FF] flex transition-all duration-200 text-white gap-2 px-3 py-2 rounded-lg hover:bg-[#5048f4] hover:shadow-[0_5px_24px__#6C63FF]  hover:-translate-y-0.5 active:bg-[#5048f4] items-center`}
             >
               <ZapIcon />

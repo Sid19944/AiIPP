@@ -16,7 +16,7 @@ function page() {
   const user = session.data?.user;
   return (
     <div
-      className="min-h-screen bg-[#08080F] flex]"
+      className="min-h-screen bg-[#08080F]"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
       <DashNav />
