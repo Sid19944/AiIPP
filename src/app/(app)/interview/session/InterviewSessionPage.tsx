@@ -2,7 +2,7 @@
 
 import { useCompletion } from "@ai-sdk/react";
 import { Sparkles, Loader2, ArrowRight } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import axios, { AxiosError } from "axios";
@@ -24,6 +24,7 @@ export default function InterviewSessionPage() {
   const difficulty = searchParams.get("difficulty");
   const topic = searchParams.get("topic");
   const counts = searchParams.get("count");
+  const router = useRouter();
 
   const [answer, setAnswer] = useState("");
   const [displayedText, setDisplayedText] = useState<string>("");
@@ -63,6 +64,8 @@ export default function InterviewSessionPage() {
         toast.error(
           axiosErr?.response?.data.message || "Internal server Error",
         );
+        router.replace("/interview/setup");
+        return;
       });
   }, [role, difficulty]);
 
@@ -111,7 +114,7 @@ export default function InterviewSessionPage() {
 
   return (
     <div className="w-full min-h-screen mx-auto p-2 md:p-6 space-y-4 bg-[#08080F] text-white">
-      {!gotAnswer ? (
+      {gotAnswer ? (
         <div id="result-section" className="flex flex-col gap-3">
           <motion.div className="grid md:grid-cols-2 gap-3">
             <RadialScore
@@ -192,6 +195,7 @@ export default function InterviewSessionPage() {
               loading={evaluatingAns}
               setAnswer={setAnswer}
               handleAnswerSubmit={handleAnswerSubmit}
+              skip={handleNextQuestion}
             />
           )}
         </>

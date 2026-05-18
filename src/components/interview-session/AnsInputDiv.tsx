@@ -7,11 +7,13 @@ function AnsInputDiv({
   answer,
   setAnswer,
   handleAnswerSubmit,
+  skip,
   loading,
 }: {
   answer: string;
   setAnswer: (newAnd: string) => void;
   handleAnswerSubmit: () => void;
+  skip : ()=>void,
   loading: boolean;
 }) {
   return (
@@ -44,6 +46,7 @@ function AnsInputDiv({
               initial={{ y: 0 }}
               whileHover={{ y: -2 }}
               disabled={loading}
+              onClick={skip}
               className="flex border border-gray-500 text-gray-500 cursor-pointer rounded-md p-1 justify-center items-center gap-2 px-2 hover:text-gray-300 hover:border-gray-300 disabled:pointer-events-none"
             >
               <SkipForward />

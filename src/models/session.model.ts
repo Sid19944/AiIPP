@@ -20,7 +20,7 @@ const SessionSchema: Schema<SessionIt> = new Schema(
     },
     role: {
       type: String,
-      enum: ["frontend", "backend", "fullstack", "dsa", "system-design"],
+      enum: ["frontend", "backend", "fullstack", "dsa", "system-design", "devops"],
       required: [true, "Enter Role"],
     },
     difficulty: {
