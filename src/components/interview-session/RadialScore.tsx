@@ -1,4 +1,5 @@
 "use client";
+import { fadeUp } from "@/lib/animation";
 import { scoreColor } from "@/utils/ScoreColor";
 import { motion } from "framer-motion";
 import CountUp from "react-countup";
@@ -18,7 +19,13 @@ function RadialScore({
   const circ = 2 * Math.PI * r;
   const color = scoreColor(score);
   return (
-    <div className="border rounded-2xl border-white/8 flex flex-col justify-center items-center gap-2 p-5">
+    <motion.div
+      custom={1}
+      variants={fadeUp}
+      initial="hidden"
+      animate="visible"
+      className="border rounded-2xl border-white/8 flex flex-col justify-center items-center gap-2 p-5"
+    >
       <div className="relative" style={{ width: size, height: size }}>
         <svg width={size} height={size} style={{ transform: "rotate(-90deg)" }}>
           <circle
@@ -51,10 +58,18 @@ function RadialScore({
         </div>
       </div>
       <div className="flex flex-col items-center">
-        <span style={{ color: color }}>Needs Work</span>
-        <span className="text-gray-500">Question {currQs} of {tQs}</span>
+        <span style={{ color: color }}>
+          {score >= 80
+            ? "Great answer!"
+            : score >= 60
+              ? "Good answer"
+              : "Needs work"}
+        </span>
+        <span className="text-gray-500">
+          Question {currQs} of {tQs}
+        </span>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
