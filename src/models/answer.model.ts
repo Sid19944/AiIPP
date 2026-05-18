@@ -11,6 +11,7 @@ export interface AnswerIt extends Document {
   depth: number;
   clarity: number;
   feedback: string;
+  idealAnswer: string;
   tips: string[];
   createdAt: Date;
 }
@@ -32,6 +33,7 @@ const AnswerSchema: Schema<AnswerIt> = new Schema({
   accuracy: Number,
   depth: Number,
   clarity: Number,
+  idealAnswer : String,
   tips: [String],
   feedback: String,
 });

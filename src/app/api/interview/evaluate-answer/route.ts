@@ -56,6 +56,7 @@ export const POST = WrapAsync(async (req: NextRequest) => {
     score: feedback.score,
     accuracy: feedback.accuracy,
     depth: feedback.depth,
+    idealAnswer: feedback.idealAnswer,
     clarity: feedback.clarity,
     tips: feedback.tips,
     feedback: feedback.feedback,
