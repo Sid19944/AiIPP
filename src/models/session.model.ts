@@ -1,6 +1,6 @@
 import mongoose, { Document, ObjectId, Schema } from "mongoose";
 
-interface SessionIt extends Document {
+export interface SessionIt extends Document {
   id: string | ObjectId;
   user: string | ObjectId;
   role: string;

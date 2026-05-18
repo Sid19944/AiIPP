@@ -12,6 +12,7 @@ import { Difficulty } from "@/types/interfaces/Difficulty";
 import { Counts } from "@/types/interfaces/Counts";
 import ReadyToStart from "@/components/interview-setup/ReadyToStart";
 import { useRouter } from "next/navigation";
+import { useInterview } from "@/context/InterviewProvider";
 
 function StepIndicator({ current, total }: { current: number; total: number }) {
   return (
@@ -60,6 +61,8 @@ function page() {
     useState<Difficulty | null>(null);
   const [questionCount, setQuestioinCount] = useState<Counts | null>(null);
 
+  const { startSession } = useInterview();
+
   const canNext =
     (step === 0 && selectedRole) ||
     (step === 1 && selectedDifficulty) ||
@@ -70,6 +73,11 @@ function page() {
       role: selectedRole?.id as string,
       difficulty: selectedDifficulty?.id as string,
       topic: selectedRole?.topics.join(" ") as string,
+    });
+
+    startSession({
+      role: selectedRole?.id,
+      difficulty: selectedDifficulty?.id,
     });
 
     router.push(

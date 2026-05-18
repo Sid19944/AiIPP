@@ -51,8 +51,9 @@ export const PUT = WrapAsync(
     findSession.isCompleted = true;
     await findSession.save();
 
+    console.log(findSession);
     return NextResponse.json(
-      { success: true, message: `Session Completed.` },
+      { success: true, result: findSession },
       { status: 201 },
     );
   },

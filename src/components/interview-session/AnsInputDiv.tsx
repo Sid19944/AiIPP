@@ -1,7 +1,7 @@
 "use client";
 import { fadeUp } from "@/lib/animation";
 import { motion } from "framer-motion";
-import { Loader, Loader2, Send, SkipForward } from "lucide-react";
+import { Loader2, Send, SkipForward } from "lucide-react";
 
 function AnsInputDiv({
   answer,
@@ -13,7 +13,7 @@ function AnsInputDiv({
   answer: string;
   setAnswer: (newAnd: string) => void;
   handleAnswerSubmit: () => void;
-  skip : ()=>void,
+  skip: () => void;
   loading: boolean;
 }) {
   return (
@@ -41,18 +41,16 @@ function AnsInputDiv({
           )}
         </div>
         <div className="flex gap-3 font-semibold">
-          {!loading && (
-            <motion.button
-              initial={{ y: 0 }}
-              whileHover={{ y: -2 }}
-              disabled={loading}
-              onClick={skip}
-              className="flex border border-gray-500 text-gray-500 cursor-pointer rounded-md p-1 justify-center items-center gap-2 px-2 hover:text-gray-300 hover:border-gray-300 disabled:pointer-events-none"
-            >
-              <SkipForward />
-              Skip
-            </motion.button>
-          )}
+          <motion.button
+            initial={{ y: 0 }}
+            whileHover={{ y: -2 }}
+            disabled={loading}
+            onClick={skip}
+            className="flex border border-gray-500 text-gray-500 cursor-pointer rounded-md p-1 justify-center items-center gap-2 px-2 hover:text-gray-300 hover:border-gray-300 disabled:pointer-events-none"
+          >
+            <SkipForward />
+            Skip
+          </motion.button>
 
           <motion.button
             initial={{ y: 0 }}

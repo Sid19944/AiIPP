@@ -1,9 +1,15 @@
 "use client";
 
 import { useCompletion } from "@ai-sdk/react";
-import { Sparkles, Loader2, ArrowRight } from "lucide-react";
+import {
+  Sparkles,
+  Loader2,
+  ArrowRight,
+  ArrowBigLeft,
+  MoveLeft,
+} from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import axios, { AxiosError } from "axios";
 import { ApiResponse } from "@/types/ApiResponse";
@@ -17,8 +23,11 @@ import WhatGood from "@/components/interview-session/WhatGood";
 import WhatMissing from "@/components/interview-session/WhatMissing";
 import Tips from "@/components/interview-session/Tips";
 import { fadeUp } from "@/lib/animation";
+import { useInterview } from "@/context/InterviewProvider";
+import Link from "next/link";
 
 export default function InterviewSessionPage() {
+  const { currSession, endSession } = useInterview();
   const searchParams = useSearchParams();
   const role = searchParams.get("role");
   const difficulty = searchParams.get("difficulty");
@@ -28,7 +37,6 @@ export default function InterviewSessionPage() {
 
   const [answer, setAnswer] = useState("");
   const [displayedText, setDisplayedText] = useState<string>("");
-  const [currSession, setCurrSession] = useState<string | null>(null);
   const [evaluatingAns, setEvaluatingAns] = useState(false);
   const [ansFeedback, setAnsFeedback] = useState<AnswerFeedback | null>(null);
   const [gotAnswer, setGotAnswer] = useState(false);
@@ -50,24 +58,7 @@ export default function InterviewSessionPage() {
 
   useEffect(() => {
     handleGenerateQuestion();
-    startSession();
   }, []);
-
-  const startSession = useCallback(() => {
-    axios
-      .post(`/api/interview/session/start`, { role, difficulty })
-      .then((res) => {
-        setCurrSession(res.data.sessionId);
-      })
-      .catch((err) => {
-        const axiosErr = err as AxiosError<ApiResponse>;
-        toast.error(
-          axiosErr?.response?.data.message || "Internal server Error",
-        );
-        router.replace("/interview/setup");
-        return;
-      });
-  }, [role, difficulty]);
 
   const handleGenerateQuestion = useCallback(async () => {
     setDisplayedText("");
@@ -96,8 +87,16 @@ export default function InterviewSessionPage() {
         setGotAnswer(true);
       })
       .catch((err) => {
-        toast.error("Failed to evaluate you answer, submit ans again!");
         setGotAnswer(false);
+        if (axios.isAxiosError(err)) {
+          if (err.response) {
+            if (err.response.status === 400) {
+              toast.error(err.response.data.message);
+            }
+          }
+        } else {
+          toast.error("Failed to evaluate you answer, submit ans again!");
+        }
       })
       .finally(() => {
         setEvaluatingAns(false);
@@ -105,6 +104,9 @@ export default function InterviewSessionPage() {
   };
 
   const handleNextQuestion = () => {
+    if (qCount === Number(counts)) {
+      handleEndSession()
+    }
     setAnsFeedback(null);
     setGotAnswer(false);
     handleGenerateQuestion();
@@ -112,8 +114,27 @@ export default function InterviewSessionPage() {
     setAnswer("");
   };
 
+  const handleEndSession = () => {
+    endSession();
+    router.replace("/interview/result");
+  };
+
   return (
     <div className="w-full min-h-screen mx-auto p-2 md:p-6 space-y-4 bg-[#08080F] text-white">
+      <header className="border flex justify-between p-2 rounded-md border-white/8 bg-[#6C63FF]/40">
+        <Link
+          onClick={endSession}
+          href="/interview/setup"
+          className="flex gap-2"
+        >
+          <MoveLeft />
+          <span>End Session</span>
+        </Link>
+
+        <div className="text-gray-300">
+          <span>{qCount}</span> / <span>{counts}</span>
+        </div>
+      </header>
       {gotAnswer ? (
         <div id="result-section" className="flex flex-col gap-3">
           <motion.div className="grid md:grid-cols-2 gap-3">
@@ -148,14 +169,25 @@ export default function InterviewSessionPage() {
             <Tips ansFeedback={ansFeedback} />
           </div>
 
-          <motion.button
-            whileHover={{ y: -4 }}
-            whileTap={{ y: 2 }}
-            onClick={handleNextQuestion}
-            className="border w-fit rounded-md border-[#6C63FF] p-2 px-5 bg-[#6C63FF]/40 font-semibold flex gap-3 text-xl items-center cursor-pointer active:bg-[#6C63FF]"
-          >
-            Next Question <ArrowRight />
-          </motion.button>
+          {qCount !== Number(counts) ? (
+            <motion.button
+              whileHover={{ y: -4 }}
+              whileTap={{ y: 2 }}
+              onClick={handleNextQuestion}
+              className="border w-fit rounded-md border-[#6C63FF] p-2 px-5 bg-[#6C63FF]/40 font-semibold flex gap-3 text-xl items-center cursor-pointer active:bg-[#6C63FF]"
+            >
+              Next Question <ArrowRight />
+            </motion.button>
+          ) : (
+            <motion.button
+              whileHover={{ y: -4 }}
+              whileTap={{ y: 2 }}
+              onClick={handleEndSession}
+              className="border w-fit rounded-md border-[#6C63FF] p-2 px-5 bg-[#6C63FF]/40 font-semibold flex gap-3 text-xl items-center cursor-pointer active:bg-[#6C63FF]"
+            >
+              View result <ArrowRight />
+            </motion.button>
+          )}
         </div>
       ) : (
         <>

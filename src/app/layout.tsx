@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ReduxProvider from "@/lib/ReduxProvider";
 import { Toaster } from "react-hot-toast";
 import AuthProvider from "@/context/AuthProvider";
-import { Zap } from "lucide-react";
+import { InterviewProvider } from "@/context/InterviewProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,10 +36,10 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <AuthProvider>
-          <ReduxProvider>
+          <InterviewProvider>
             {children}
             <Toaster reverseOrder={false} position="top-center" />
-          </ReduxProvider>
+          </InterviewProvider>
         </AuthProvider>
       </body>
     </html>

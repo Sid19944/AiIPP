@@ -23,7 +23,11 @@ export const POST = WrapAsync(async (req: NextRequest) => {
   const { currSession, question, userAnswer, role, difficulty } =
     await req.json();
 
-  if (!currSession || !question || !userAnswer || !role || !difficulty) {
+  if (!currSession) {
+    throw new ErrorHandler("Start new Session ", 400);
+  }
+
+  if (!question || !userAnswer || !role || !difficulty) {
     throw new ErrorHandler("Required data is missing", 400);
   }
 
