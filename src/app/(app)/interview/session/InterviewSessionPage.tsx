@@ -5,7 +5,6 @@ import {
   Sparkles,
   Loader2,
   ArrowRight,
-  ArrowBigLeft,
   MoveLeft,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -105,7 +104,7 @@ export default function InterviewSessionPage() {
 
   const handleNextQuestion = () => {
     if (qCount === Number(counts)) {
-      handleEndSession()
+      handleEndSession();
     }
     setAnsFeedback(null);
     setGotAnswer(false);
@@ -116,8 +115,10 @@ export default function InterviewSessionPage() {
 
   const handleEndSession = () => {
     endSession();
-    router.replace("/interview/result");
+    router.replace(`/interview/result/${currSession}`);
   };
+
+  
 
   return (
     <div className="w-full min-h-screen mx-auto p-2 md:p-6 space-y-4 bg-[#08080F] text-white">

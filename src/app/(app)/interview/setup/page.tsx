@@ -78,6 +78,7 @@ function page() {
     startSession({
       role: selectedRole?.id,
       difficulty: selectedDifficulty?.id,
+      totalQs : questionCount?.id
     });
 
     router.push(

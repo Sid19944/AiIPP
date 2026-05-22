@@ -16,18 +16,10 @@ import {
 import { ArrowUpRight } from "lucide-react";
 import { fadeUp } from "@/lib/animation";
 
-const scoreHistory = [
-  { session: "S1", score: 48 },
-  { session: "S2", score: 55 },
-  { session: "S3", score: 61 },
-  { session: "S4", score: 58 },
-  { session: "S5", score: 70 },
-  { session: "S6", score: 74 },
-  { session: "S7", score: 69 },
-  { session: "S8", score: 78 },
-  { session: "S9", score: 82 },
-  { session: "S10", score: 87 },
-];
+export interface ScoreHistory {
+  label: string;
+  score: number;
+}
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
@@ -39,13 +31,17 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   );
 };
 
-function ScoreChart() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true });
-  // when inView call db
+function ScoreChart({
+  scoreHistory,
+  heading,
+  subHeading,
+}: {
+  scoreHistory: ScoreHistory[];
+  heading: string;
+  subHeading: string;
+}) {
   return (
     <motion.div
-      ref={ref}
       id="score"
       custom={0}
       variants={fadeUp}
@@ -56,14 +52,8 @@ function ScoreChart() {
     >
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h3 className="text-white font-semibold">Score trend</h3>
-          <p>Last 10 sessions</p>
-        </div>
-        <div
-          className={`flex items-center gap-1.5 border rounded-full px-3 py-1 text-emerald-400 bg-emerald-400/10 text-xs`}
-        >
-          <ArrowUpRight size={12} />
-          +39 pts since start
+          <h3 className="text-white font-semibold">{heading}</h3>
+          <p>{subHeading}</p>
         </div>
       </div>
       <ResponsiveContainer width="100%" height={200} className="">
@@ -72,7 +62,7 @@ function ScoreChart() {
           margin={{ top: 5, right: 5, bottom: 5, left: -20 }}
         >
           <XAxis
-            dataKey="session"
+            dataKey="label"
             tick={{ fill: "rgba(255,255,255,0.2)", fontSize: 10 }}
             axisLine={false}
             tickLine={false}

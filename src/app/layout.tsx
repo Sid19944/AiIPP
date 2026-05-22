@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import AuthProvider from "@/context/AuthProvider";
 import { InterviewProvider } from "@/context/InterviewProvider";
+import { ResultProvider } from "@/context/ResultProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,8 +38,10 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <AuthProvider>
           <InterviewProvider>
-            {children}
-            <Toaster reverseOrder={false} position="top-center" />
+            <ResultProvider>
+              {children}
+              <Toaster reverseOrder={false} position="top-center" />
+            </ResultProvider>
           </InterviewProvider>
         </AuthProvider>
       </body>

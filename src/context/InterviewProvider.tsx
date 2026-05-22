@@ -1,17 +1,10 @@
-"use client";
+'use client'
 
-import { SessionIt } from "@/models/session.model";
 import { ApiResponse } from "@/types/ApiResponse";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
-import {
-  createContext,
-  ReactNode,
-  useCallback,
-  useContext,
-  useState,
-} from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import toast from "react-hot-toast";
 
 interface InterviewContext {
@@ -19,8 +12,10 @@ interface InterviewContext {
   startSession: ({
     role,
     difficulty,
+    totalQs,
   }: {
     role: string | undefined;
+    totalQs: number | undefined;
     difficulty: string | undefined;
   }) => void;
 
@@ -32,13 +27,11 @@ const InterviewContext = createContext<InterviewContext | undefined>(undefined);
 export function InterviewProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const [currSession, setCurrSession] = useState<string | null>(null);
-  const [result, setResult] = useState<SessionIt | null>(null);
 
   const endSession = () => {
     axios
       .put(`/api/interview/session/${currSession}/complete`)
       .then((res) => {
-        setResult(res.data.result);
         console.log("Result of this Session", res.data.result);
       })
       .catch((err) => console.log(err));
@@ -47,12 +40,14 @@ export function InterviewProvider({ children }: { children: ReactNode }) {
   const startSession = ({
     role,
     difficulty,
+    totalQs,
   }: {
     role: string | undefined;
     difficulty: string | undefined;
+    totalQs: number | undefined;
   }) => {
     axios
-      .post(`/api/interview/session/start`, { role, difficulty })
+      .post(`/api/interview/session/start`, { role, difficulty, totalQs })
       .then((res) => {
         setCurrSession(res.data.sessionId);
       })
@@ -65,8 +60,6 @@ export function InterviewProvider({ children }: { children: ReactNode }) {
         return;
       });
   };
-
-  console.log(currSession)
 
   return (
     <InterviewContext.Provider

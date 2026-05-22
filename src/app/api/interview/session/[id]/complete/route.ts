@@ -7,8 +7,11 @@ import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 interface DataIt {
-  totalScore: number;
-  totalQuestions: number;
+  avgScore: number;
+  avgAccuracy: number;
+  avgDepth: number;
+  avgClarity: number;
+  answeredQs: number;
 }
 
 export const PUT = WrapAsync(
@@ -31,27 +34,32 @@ export const PUT = WrapAsync(
       {
         $group: {
           _id: null,
-          totalScore: { $avg: "$score" },
-          totalQuestions: { $sum: 1 },
+          avgScore: { $avg: "$score" },
+          avgAccuracy: { $avg: "$accuracy" },
+          avgDepth: { $avg: "$depth" },
+          avgClarity: { $avg: "$clarity" },
+          answeredQs: { $sum: 1 },
         },
       },
       {
         $project: {
-          totalScore: 1,
-          totalQuestions: 1,
+          avgScore: 1,
+          avgAccuracy: 1,
+          avgDepth: 1,
+          avgClarity: 1,
+          answeredQs: 1,
         },
       },
     ]);
 
-    const scores = data[0] || { totalScore: 0, totalQuestions: 0 };
+    const scores = data[0] || { avgScore: 0, answeredQs: 0 };
 
-    findSession.totalScore = scores.totalScore || 0;
-    findSession.totalQuestions = scores.totalQuestions || 0;
+    findSession.avgScore = scores.avgScore || 0;
+    findSession.answeredQs = scores.answeredQs || 0;
     findSession.completedAt = new Date();
     findSession.isCompleted = true;
     await findSession.save();
 
-    console.log(findSession);
     return NextResponse.json(
       { success: true, result: findSession },
       { status: 201 },

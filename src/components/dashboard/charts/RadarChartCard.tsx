@@ -10,16 +10,29 @@ import {
   RadarChart,
 } from "recharts";
 
-const radarData = [
-  { topic: "React", score: 85 },
-  { topic: "Node.js", score: 62 },
-  { topic: "DSA", score: 48 },
-  { topic: "System Design", score: 55 },
-  { topic: "TypeScript", score: 78 },
-  { topic: "CSS", score: 90 },
-];
+// const radarData = [
+//   { topic: "React", score: 85 },
+//   { topic: "Node.js", score: 62 },
+//   { topic: "DSA", score: 48 },
+//   { topic: "System Design", score: 55 },
+//   { topic: "TypeScript", score: 78 },
+//   { topic: "CSS", score: 90 },
+// ];
 
-function Radarchart() {
+interface RadarData {
+  topic: string;
+  score: number;
+}
+
+function Radarchart({
+  radarData,
+  heading,
+  subHeading,
+}: {
+  radarData: RadarData[];
+  heading: string;
+  subHeading: string;
+}) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
   // when inView call db
@@ -34,8 +47,8 @@ function Radarchart() {
       className="bg-[#0D0D14] border border-white/5 rounded-2xl p-5"
     >
       <div className="mb-4">
-        <h3 className="text-white font-semibold text-sm">Topic coverage</h3>
-        <p className="text-xs text-white/30">Skill radar</p>
+        <h3 className="text-white font-semibold text-sm">{heading}</h3>
+        <p className="text-xs text-white/30">{subHeading}</p>
       </div>
       <ResponsiveContainer width="100%" height={190}>
         <RadarChart data={radarData}>

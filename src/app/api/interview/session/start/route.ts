@@ -16,7 +16,7 @@ export const POST = WrapAsync(async (req: NextRequest) => {
     throw new ErrorHandler("Not Authenticated", 400);
   }
 
-  const { role, difficulty } = await req.json();
+  const { role, difficulty, totalQs } = await req.json();
 
   if (!role || !difficulty) {
     throw new ErrorHandler("Provide Role and Difficulty", 400);
@@ -26,6 +26,7 @@ export const POST = WrapAsync(async (req: NextRequest) => {
     user: user._id,
     role,
     difficulty,
+    totalQs
   });
 
   if (!createSession) {

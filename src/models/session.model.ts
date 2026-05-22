@@ -5,9 +5,13 @@ export interface SessionIt extends Document {
   user: string | ObjectId;
   role: string;
   difficulty: string;
-  totalScore: number;
+  avgScore: number;
+  avgAccuracy: number;
+  avgDepth: number;
+  avgClarity: number;
   isCompleted: boolean;
-  totalQuestions: number;
+  totalQs: number;
+  answeredQs: number;
   completedAt: Date;
 }
 
@@ -20,7 +24,14 @@ const SessionSchema: Schema<SessionIt> = new Schema(
     },
     role: {
       type: String,
-      enum: ["frontend", "backend", "fullstack", "dsa", "system-design", "devops"],
+      enum: [
+        "frontend",
+        "backend",
+        "fullstack",
+        "dsa",
+        "system-design",
+        "devops",
+      ],
       required: [true, "Enter Role"],
     },
     difficulty: {
@@ -28,13 +39,29 @@ const SessionSchema: Schema<SessionIt> = new Schema(
       enum: ["easy", "medium", "hard"],
       required: [true, "Enter difficulty level"],
     },
-    totalScore: {
+    avgScore: {
       type: Number,
       default: 0,
     },
-    totalQuestions: {
+    avgAccuracy: {
       type: Number,
       default: 0,
+    },
+    avgDepth: {
+      type: Number,
+      default: 0,
+    },
+    avgClarity: {
+      type: Number,
+      default: 0,
+    },
+    answeredQs: {
+      type: Number,
+      default: 0,
+    },
+    totalQs: {
+      type: Number,
+      required: true,
     },
     isCompleted: {
       type: Boolean,
