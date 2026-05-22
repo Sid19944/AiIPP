@@ -58,8 +58,8 @@ function page() {
         </div>
 
         <div className="grid gap-4 lg:grid-cols-4">
-          <ScoreChart/>
-          <Radarchart/>
+          {/* <ScoreChart/>
+          <Radarchart/> */}
         </div>
       </main>
     </div>
