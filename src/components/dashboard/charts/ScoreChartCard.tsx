@@ -15,6 +15,7 @@ import {
 } from "recharts";
 import { ArrowUpRight } from "lucide-react";
 import { fadeUp } from "@/lib/animation";
+import { scoreColor } from "@/utils/ScoreColor";
 
 export interface ScoreHistory {
   label: string;
@@ -35,11 +36,14 @@ function ScoreChart({
   scoreHistory,
   heading,
   subHeading,
+  avgScore,
 }: {
   scoreHistory: ScoreHistory[];
   heading: string;
   subHeading: string;
+  avgScore: number | undefined;
 }) {
+  const color = scoreColor(avgScore || 0);
   return (
     <motion.div
       id="score"
@@ -54,6 +58,11 @@ function ScoreChart({
         <div>
           <h3 className="text-white font-semibold">{heading}</h3>
           <p>{subHeading}</p>
+        </div>
+        <div className="border rounded-2xl  py-1 px-2 border-white/8 bg-[#15151A]">
+          <span>
+            Avg : <span style={{ color: color }}>{avgScore}</span>
+          </span>
         </div>
       </div>
       <ResponsiveContainer width="100%" height={200} className="">

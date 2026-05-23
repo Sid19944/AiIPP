@@ -48,7 +48,9 @@ export const POST = WrapAsync(async (req: NextRequest) => {
     tips: feedback.tips,
   });
 
-  await AnswerModel.create({
+  console.log(feedback.good)
+
+  const ans = await AnswerModel.create({
     session: currSession,
     user: user._id,
     question,
@@ -59,6 +61,8 @@ export const POST = WrapAsync(async (req: NextRequest) => {
     idealAnswer: feedback.idealAnswer,
     clarity: feedback.clarity,
     tips: feedback.tips,
+    good: feedback.good,
+    missing: feedback.missing,
     feedback: feedback.feedback,
   });
 

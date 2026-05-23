@@ -12,6 +12,8 @@ export interface AnswerIt extends Document {
   clarity: number;
   feedback: string;
   idealAnswer: string;
+  good: string[];
+  missing: string[];
   tips: string[];
   createdAt: Date;
 }
@@ -33,7 +35,9 @@ const AnswerSchema: Schema<AnswerIt> = new Schema({
   accuracy: Number,
   depth: Number,
   clarity: Number,
-  idealAnswer : String,
+  good: [String],
+  missing: [String],
+  idealAnswer: String,
   tips: [String],
   feedback: String,
 });
@@ -41,3 +45,4 @@ const AnswerSchema: Schema<AnswerIt> = new Schema({
 export const AnswerModel =
   (mongoose.models.Answer as mongoose.Model<AnswerIt>) ||
   mongoose.model<AnswerIt>("Answer", AnswerSchema);
+ 

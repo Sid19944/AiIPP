@@ -52,9 +52,18 @@ export const PUT = WrapAsync(
       },
     ]);
 
-    const scores = data[0] || { avgScore: 0, answeredQs: 0 };
+    const scores = data[0] || {
+      avgScore: 0,
+      answeredQs: 0,
+      avgAccuracy: 0,
+      avgDepth: 0,
+      avgClarity: 0,
+    };
 
     findSession.avgScore = scores.avgScore || 0;
+    findSession.avgAccuracy = scores.avgAccuracy || 0;
+    findSession.avgClarity = scores.avgClarity || 0;
+    findSession.avgDepth = scores.avgDepth || 0;
     findSession.answeredQs = scores.answeredQs || 0;
     findSession.completedAt = new Date();
     findSession.isCompleted = true;

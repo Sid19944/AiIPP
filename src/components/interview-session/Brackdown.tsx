@@ -17,7 +17,7 @@ function Brackdown({ score, label }: { score: number; label: string }) {
             transition={{ duration: 0.85, ease: [0.34, 1.56, 0.64, 1] }}
           />
         </div>
-        <span style={{ color: color }}>{score} %</span>
+        <span style={{ color: color }}>{score.toFixed(1)} %</span>
       </div>
     </div>
   );
