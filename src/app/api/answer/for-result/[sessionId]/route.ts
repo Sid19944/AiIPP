@@ -1,7 +1,9 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import dbConnect from "@/lib/dbConnect";
 import { AnswerModel } from "@/models/answer.model";
 import ErrorHandler from "@/utils/ErrorHandler";
 import { WrapAsync } from "@/utils/WrapAsync";
+import { getServerSession, User } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = WrapAsync(
@@ -11,6 +13,9 @@ export const GET = WrapAsync(
   ) => {
     await dbConnect();
     const { sessionId } = await params;
+
+    const session  = await getServerSession(authOptions)
+    const user : User = session?.user as User
 
     const answers = await AnswerModel.find({ session: sessionId });
 

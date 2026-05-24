@@ -16,8 +16,6 @@ import WhatWasMissing from "./WhatWasMissing";
 
 function QuestionCard({ ans, idx }: { ans: AnswerIt; idx: number }) {
   const color = scoreColor(ans.score);
-
-  console.log(ans)
   return (
     <AccordionItem
       value={`${ans._id}`}

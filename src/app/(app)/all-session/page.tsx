@@ -1,0 +1,125 @@
+"use client";
+
+import SessionCard from "@/components/sessions/SessionCard";
+import StatCard from "@/components/sessions/StatCard";
+import { SessionIt } from "@/models/session.model";
+import axios from "axios";
+import { ArrowLeft, Calendar } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+export interface SessionsIt extends SessionIt {
+  avgScoreOfDocs: number;
+  totalSession: number;
+  avgClarityOfDocs: number;
+}
+
+function page() {
+  const page = 1;
+  const [sessions, setSessions] = useState<SessionsIt[] | []>([]);
+  useEffect(() => {
+    axios
+      .get(`/api/sessions/get-all/${page}`)
+      .then((res) => {
+        setSessions(res.data.sessions);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
+  let totalSession = 0;
+  let avgScore = 0;
+  let bestScore = 0;
+  let avgClarity = 0;
+
+  if (sessions.length) {
+    totalSession = sessions[0].totalSession;
+    avgScore = Number(sessions[0].avgScoreOfDocs.toFixed(2));
+    let best = sessions.reduce((best, curr) => {
+      return curr.avgScore > best.avgScore ? curr : best;
+    });
+    bestScore = Number(best.avgScore.toFixed(2));
+    avgClarity = Number(sessions[0].avgClarityOfDocs.toFixed(2));
+  }
+
+  return (
+    <div
+      className="min-h-screen bg-[#08080F] text-white"
+      style={{ fontFamily: "'DM Sans', sans-serif" }}
+    >
+      <nav className="sticky top-0 z-10 bg-black/70 p-3 backdrop-blur border-b border-[#5e5d8a] flex justify-between items-center">
+        <Link href="/dashboard" className="flex gap-2">
+          <ArrowLeft />
+          Dashboard
+        </Link>
+
+        <Link href="/interview/setup" className="p-3 rounded-lg bg-[#6864F1]">
+          New Session +
+        </Link>
+      </nav>
+      
+      <div className="max-w-7xl m-auto flex flex-col gap-8 p-3">
+        <div>
+          <div className="border w-fit flex py-1 px-3 rounded-full text-sm items-center gap-1 text-[#6864F1] bg-[#131529] border-[#6864F1]">
+            <Calendar size={15} /> SESSION HISTOTY
+          </div>
+          <h1
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+            }}
+            className="text-4xl "
+          >
+            All <em>{sessions.length && sessions[0].totalSession}</em> sessions,
+            <br />
+            <em style={{ color: `#6864F1` }}>every detail</em>
+          </h1>
+          <p className="text-lg text-gray-400">
+            Your complete interview history. Click any session to review
+            feedback.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 z-1 sticky top-0">
+          <StatCard
+            i={1}
+            score={totalSession}
+            label="Total sessions"
+            subLabel=""
+          />
+          <StatCard
+            i={2}
+            score={avgScore}
+            label="Average score"
+            subLabel="All time"
+          />
+          <StatCard
+            i={3}
+            score={bestScore}
+            label="Best score"
+            subLabel="role"
+          />
+          <StatCard
+            i={4}
+            score={avgClarity}
+            label="Average clarity"
+            subLabel="All Time"
+          />
+        </div>
+
+        <div className="flex flex-col gap-2 z-2 backdrop-blur">
+          {sessions.map((el, idx, sessions) => (
+            <SessionCard
+              key={el._id.toString()}
+              el={el}
+              idx={idx}
+              sessions={sessions}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default page;

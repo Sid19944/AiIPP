@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
 export interface UserIt extends Document {
-  id: string | ObjectId;
+  id: string
   username: string;
   email: string;
   password: string;

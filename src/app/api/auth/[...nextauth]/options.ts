@@ -59,6 +59,9 @@ export const authOptions: NextAuthOptions = {
         session.user.username = token.username as string;
         session.user.email = token.email as string;
         session.user.isVerified = token.isVerified as boolean;
+
+        delete (session.user as any).name;
+        delete (session.user as any).image;
       }
       return session;
     },

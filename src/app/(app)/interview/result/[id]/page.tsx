@@ -22,9 +22,8 @@ import {
   Target,
 } from "lucide-react";
 import AnsweerInfo from "@/components/result/AnsweerInfo";
-import RadialSvgCircle from "@/components/result/RadialSvgCircle";
 import QuestionCard from "@/components/result/QuestionCard";
-import { Accordion, AccordionItem } from "@/components/ui/accordion";
+import { Accordion } from "@/components/ui/accordion";
 import { AnswerIt } from "@/models/answer.model";
 import Link from "next/link";
 
@@ -141,7 +140,7 @@ function page() {
             href="/dashboard"
             className="flex gap-2 rounded-xl p-3 w-fit border border-white/8 hover:border-white/50 text-xl items-center"
           >
-            <LayoutDashboard/>
+            <LayoutDashboard />
             Dashboard
           </Link>
         </div>

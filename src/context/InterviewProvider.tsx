@@ -32,7 +32,7 @@ export function InterviewProvider({ children }: { children: ReactNode }) {
     axios
       .put(`/api/interview/session/${currSession}/complete`)
       .then((res) => {
-        console.log("Result of this Session", res.data.result);
+        console.log("Session Ended Successfully");
       })
       .catch((err) => console.log(err));
   };

@@ -1,4 +1,4 @@
-import redis from "./Redis";
+import redis from "../lib/Redis";
 
 export async function getCached<T>(
   key: string,
