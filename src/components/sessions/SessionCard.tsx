@@ -34,7 +34,7 @@ function SessionCard({
       <div className="flex gap-3 justify-between w-full items-center">
         <div className="flex flex-col">
           <div className="flex gap-3 ">
-            <span>{el.role}</span>
+            <span className="text-xl">{el.role}</span>
             <span
               className={`px-2 rounded-full ${el.difficulty === "easy" ? "bg-[#192824] text-green-500" : el.difficulty === "medium" ? "bg-[#2A261F] text-yellow-500" : "bg-[#271920] text-red-600"}`}
             >
@@ -65,7 +65,7 @@ function SessionCard({
         <div>
           {idx < sessions.length - 1 && (
             <em
-              className={`${sessions[idx].avgScore - sessions[idx + 1].avgScore < 0 ? "text-red-500" : "text-green-500"} font-semibold flex items-center gap-1 justify-center`}
+              className={`${sessions[idx].avgScore - sessions[idx + 1].avgScore < 0 ? "text-red-500" : "text-green-500"} flex items-center text-xs justify-center`}
             >
               {sessions[idx].avgScore - sessions[idx + 1].avgScore < 0 ? (
                 <ArrowDown size={13} />
@@ -75,7 +75,8 @@ function SessionCard({
 
               {Math.abs(
                 sessions[idx].avgScore - sessions[idx + 1].avgScore,
-              ).toFixed(2)}
+              ).toFixed(1)}{" "}
+              pts
             </em>
           )}
           <Link

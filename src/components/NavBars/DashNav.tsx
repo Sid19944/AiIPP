@@ -12,6 +12,7 @@ import {
   User,
   X,
   Zap,
+  LayoutList,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -25,9 +26,21 @@ const navItems = [
     active: true,
   },
   { icon: Mic, label: "Interview", href: "/interview/setup", active: false },
+  {
+    icon: LayoutList,
+    label: "All-Session",
+    href: "/all-session",
+    active: false,
+  },
   { icon: BookOpen, label: "Questions", href: "/questions", active: false },
   { icon: FileText, label: "Resume", href: "/resume", active: false },
   { icon: User, label: "Profile", href: "/profile", active: false },
+];
+
+const navItemsForDesk = [
+  { label: "Sessions", href: "/all-session" },
+  { label: "Questions", href: "/questions" },
+  { label: "Resume", href: "/resume" },
 ];
 
 function DashNav() {
@@ -40,16 +53,30 @@ function DashNav() {
       <header className="text-white px-3 py-2 border sticky top-0 z-30 bg-black/80 border-gray-800 flex justify-between items-center backdrop-blur">
         <div className="flex gap-2 items-center">
           <button
-            className="md:hidden text-gray-500 hover:text-white transition-colors"
+            className="md:hidden cursor-pointer text-gray-500 hover:text-white transition-colors"
             onClick={() => setOpen(true)}
           >
             <Menu />
           </button>
           <div>
             <h1 className="hidden md:flex">Dashboard</h1>
-            <p className="text-sm text-gray-500">Welcome back, {user?.username}👋</p>
+            <p className="text-sm text-gray-500">
+              Welcome back, {user?.username}👋
+            </p>
           </div>
         </div>
+        <div className="md:flex gap-3 hidden">
+          {navItemsForDesk.map((el, idx) => (
+            <Link
+              key={idx}
+              href="/all-session"
+              className="text-gray-400 hover:text-[#5B52EE] transition-all duration-200"
+            >
+              {el.label}
+            </Link>
+          ))}
+        </div>
+
         <Link
           href="/interview/setup"
           className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#6C63FF] text-white text-xs font-medium hover:bg-[#5B52EE] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(108,99,255,0.4)]"
@@ -86,7 +113,7 @@ function DashNav() {
 
           <button
             onClick={() => setOpen(false)}
-            className="md:hidden text-white/40 hover:text-white p-1"
+            className="md:hidden cursor-pointer text-white/40 hover:text-white p-1"
           >
             <X size={20} />
           </button>

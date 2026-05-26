@@ -11,7 +11,6 @@ import { useState } from "react";
 
 
 function page() {
-  const [open, setOpen] = useState(false);
   const session = useSession();
   const user = session.data?.user;
   return (

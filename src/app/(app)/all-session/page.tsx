@@ -4,15 +4,38 @@ import SessionCard from "@/components/sessions/SessionCard";
 import StatCard from "@/components/sessions/StatCard";
 import { SessionIt } from "@/models/session.model";
 import axios from "axios";
-import { ArrowLeft, Calendar } from "lucide-react";
+import { ArrowLeft, Calendar, ChevronDown } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import Filter from "@/components/sessions/Filter";
 
 export interface SessionsIt extends SessionIt {
   avgScoreOfDocs: number;
   totalSession: number;
   avgClarityOfDocs: number;
 }
+
+const Roleoptions = [
+  "All-Role",
+  "frontend",
+  "backend",
+  "fullstack",
+  "dsa",
+  "system-design",
+  "devops",
+];
+
+const DifficultyOptions = ["All-Difficulty", "easy", "medium", "hard"];
 
 function page() {
   const page = 1;
@@ -32,6 +55,18 @@ function page() {
   let avgScore = 0;
   let bestScore = 0;
   let avgClarity = 0;
+
+  const [selRole, setSelRole] = useState("All-Role");
+  const [selDiff, setSelDiff] = useState("All-Difficulty");
+
+  const filtered = useMemo(() => {
+    let result = [...sessions];
+    if (selRole !== "All-Role")
+      result = result.filter((s) => s.role === selRole);
+    if (selDiff !== "All-Difficulty")
+      result = result.filter((s) => s.difficulty === selDiff);
+    return result;
+  }, [selDiff, selRole, sessions]);
 
   if (sessions.length) {
     totalSession = sessions[0].totalSession;
@@ -58,9 +93,9 @@ function page() {
           New Session +
         </Link>
       </nav>
-      
-      <div className="max-w-7xl m-auto flex flex-col gap-8 p-3">
-        <div>
+
+      <div className="max-w-6xl m-auto flex flex-col gap-8 p-3">
+        <div className="flex flex-col p-5 gap-3">
           <div className="border w-fit flex py-1 px-3 rounded-full text-sm items-center gap-1 text-[#6864F1] bg-[#131529] border-[#6864F1]">
             <Calendar size={15} /> SESSION HISTOTY
           </div>
@@ -107,8 +142,17 @@ function page() {
           />
         </div>
 
-        <div className="flex flex-col gap-2 z-2 backdrop-blur">
-          {sessions.map((el, idx, sessions) => (
+        <div className="sticky top-18 z-10 p-3 flex gap-3 justify-end">
+          <Filter value={selRole} setValue={setSelRole} options={Roleoptions} />
+          <Filter
+            value={selDiff}
+            setValue={setSelDiff}
+            options={DifficultyOptions}
+          />
+        </div>
+
+        <div className="grid gap-2 z-2 backdrop-blur">
+          {filtered.map((el, idx, sessions) => (
             <SessionCard
               key={el._id.toString()}
               el={el}
