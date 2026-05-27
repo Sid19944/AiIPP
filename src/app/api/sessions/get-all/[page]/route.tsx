@@ -1,11 +1,18 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import dbConnect from "@/lib/dbConnect";
-import { SessionModel } from "@/models/session.model";
+import { SessionIt, SessionModel } from "@/models/session.model";
 import ErrorHandler from "@/utils/ErrorHandler";
 import { WrapAsync } from "@/utils/WrapAsync";
 import mongoose from "mongoose";
 import { getServerSession, User } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+
+export interface SessionsIt extends SessionIt {
+  avgScoreOfDocs: number;
+  avgClarityOfDocs: number;
+  totalSession: number;
+  bestScore: number;
+}
 
 export const GET = WrapAsync(
   async (
@@ -30,7 +37,7 @@ export const GET = WrapAsync(
     const limit = 10;
     const skip = (pageNo - 1) * limit;
 
-    const sessions = await SessionModel.aggregate([
+    const data = await SessionModel.aggregate([
       {
         $match: {
           user: new mongoose.Types.ObjectId(user._id as string),
@@ -41,7 +48,8 @@ export const GET = WrapAsync(
         $setWindowFields: {
           output: {
             avgScoreOfDocs: { $avg: "$avgScore" },
-            avgClarityOfDocs : {$avg : "$avgClarity"},
+            avgClarityOfDocs: { $avg: "$avgClarity" },
+            bestScore: { $max: "$avgScore" },
             totalSession: { $count: {} },
           },
         },
@@ -51,6 +59,15 @@ export const GET = WrapAsync(
       { $limit: limit },
     ]);
 
-    return NextResponse.json({ success: true, sessions }, { status: 200 });
+    if (!data.length) {
+      throw new ErrorHandler("Semething went wrong to find session", 500);
+    }
+    const sessions: SessionsIt = data[0];
+    const totalPage = Math.ceil(sessions.totalSession / limit);
+
+    return NextResponse.json(
+      { success: true, page, totalPage, sessions: data },
+      { status: 200 },
+    );
   },
 );
