@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+"use client";
+import { motion } from "framer-motion";
 
 import {
   LineChart,
@@ -8,12 +8,7 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  Radar,
 } from "recharts";
-import { ArrowUpRight } from "lucide-react";
 import { fadeUp } from "@/lib/animation";
 import { scoreColor } from "@/utils/ScoreColor";
 
@@ -52,7 +47,7 @@ function ScoreChart({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className="border border-white/5 rounded-2xl text-gray-500 p-2 md:p-5 lg:col-span-3"
+      className="border border-white/5 rounded-2xl text-gray-500 p-2 md:p-5 lg:col-span-4"
     >
       <div className="flex items-center justify-between mb-5">
         <div>

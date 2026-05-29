@@ -20,8 +20,8 @@ function Filter({
   options: string[];
 }) {
   return (
-    <Select value={value} onValueChange={(val) => setValue(val)}>
-      <SelectTrigger className="w-full max-w-48 cursor-pointer">
+    <Select value={value} onValueChange={(val) => setValue(val)} >
+      <SelectTrigger className="w-full max-w-48 cursor-pointer bg-[#08080F]">
         <SelectValue placeholder="All Role" />
       </SelectTrigger>
       <SelectContent>

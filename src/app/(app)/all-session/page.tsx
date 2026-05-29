@@ -2,15 +2,8 @@
 
 import SessionCard from "@/components/sessions/SessionCard";
 import StatCard from "@/components/sessions/StatCard";
-import { SessionIt } from "@/models/session.model";
 import axios from "axios";
-import {
-  ArrowLeft,
-  Calendar,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { ArrowLeft, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -86,6 +79,8 @@ function page() {
     };
   }, [sessions.length]);
 
+  
+
   return (
     <div
       className="min-h-screen bg-[#08080F] text-white"
@@ -150,17 +145,22 @@ function page() {
             subLabel="All Time"
           />
         </div>
+
         <div
           id="filter-nav"
           className="sticky top-18 z-10 p-3 flex gap-3 justify-end"
         >
-          <Filter value={selRole} setValue={setSelRole} options={Roleoptions} />
+          <Filter value={selRole} setValue={setSelRole} options={Roleoptions}/>
           <Filter
             value={selDiff}
             setValue={setSelDiff}
             options={DifficultyOptions}
           />
+          <div className="flex items-center text-xl text-gray-400">
+            {filtered.length}
+          </div>
         </div>
+
         <div id="session-card" className="grid gap-2 z-2 backdrop-blur">
           {filtered.map((el, idx, sessions) => (
             <SessionCard

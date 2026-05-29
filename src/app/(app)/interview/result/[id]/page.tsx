@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import ScoreChartCard from "@/components/dashboard/charts/ScoreChartCard";
 import Brackdown from "@/components/interview-session/Brackdown";
 import { useResult } from "@/context/ResultProvider";
@@ -10,13 +9,9 @@ import RadialScore from "@/components/result/RadialScore";
 import { ScoreHistory } from "@/components/dashboard/charts/ScoreChartCard";
 import {
   CheckCircle2,
-  Hash,
   Info,
   LayoutDashboard,
-  Loader2Icon,
-  MessageCircle,
   PartyPopper,
-  ReplyIcon,
   RotateCcw,
   Star,
   Target,

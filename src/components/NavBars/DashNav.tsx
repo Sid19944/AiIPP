@@ -77,13 +77,22 @@ function DashNav() {
           ))}
         </div>
 
-        <Link
-          href="/interview/setup"
-          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#6C63FF] text-white text-xs font-medium hover:bg-[#5B52EE] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(108,99,255,0.4)]"
-        >
-          <Play size={14} />
-          New Interview
-        </Link>
+        <div className="flex gap-1">
+          <Link
+            href="/interview/setup"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#6C63FF] text-white text-xs font-medium hover:bg-[#5B52EE] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(108,99,255,0.4)]"
+          >
+            <Play size={14} />
+            New Interview
+          </Link>
+          <Button
+            className="cursor-pointer text-gray-400 hover:text-white hidden md:flex"
+            onClick={() => signOut()}
+          >
+            <LogOut />
+            Sign Out
+          </Button>
+        </div>
       </header>
       <AnimatePresence>
         {open && (

@@ -1,13 +1,13 @@
 "use client";
 
-import { hover, motion } from "framer-motion";
+import {  motion } from "framer-motion";
 import RadialSvgCircle from "../result/RadialSvgCircle";
 import Link from "next/link";
 import { ArrowDown, ArrowRight, ArrowUp } from "lucide-react";
-import { SessionsIt } from "@/app/(app)/all-session/page";
 import { fadeUp } from "@/lib/animation";
 import { scoreColor } from "@/utils/ScoreColor";
 import { useState } from "react";
+import { SessionsIt } from "@/app/api/sessions/get-all/[page]/route";
 
 function SessionCard({
   el,
@@ -34,7 +34,7 @@ function SessionCard({
       <div className="flex gap-3 justify-between w-full items-center">
         <div className="flex flex-col">
           <div className="flex gap-3 ">
-            <span className="text-xl">{el.role}</span>
+            <span className="text-xl text-white">{el.role}</span>
             <span
               className={`px-2 rounded-full ${el.difficulty === "easy" ? "bg-[#192824] text-green-500" : el.difficulty === "medium" ? "bg-[#2A261F] text-yellow-500" : "bg-[#271920] text-red-600"}`}
             >
@@ -81,7 +81,7 @@ function SessionCard({
           )}
           <Link
             href={`/interview/result/${el._id}`}
-            className="flex gap-1 p-2 rounded-lg bg-gray-700 text-gray-400 hover:-translate-y-1 duration-200"
+            className="flex gap-1 p-2 rounded-lg bg-gray-700 text-gray-400 hover:-translate-y-0.5 duration-200"
           >
             Review
             <ArrowRight />
