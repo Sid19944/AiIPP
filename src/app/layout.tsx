@@ -22,6 +22,9 @@ export const metadata: Metadata = {
   icons: {
     icon: "/logo.png",
   },
+  verification : {
+    google : "79WKNOHZ9krvaHE58cYABoo2YlsnJ9maVcoptbL-ve4"
+  }
 };
 
 export default function RootLayout({
@@ -34,7 +37,6 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
-      
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <AuthProvider>
