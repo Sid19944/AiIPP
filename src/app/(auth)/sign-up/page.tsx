@@ -56,6 +56,9 @@ function page() {
       .post<ApiResponse>("/api/auth/sign-up", data)
       .then((res) => {
         toast.success(res.data.message);
+        setTimeout(() => {
+          router.replace(`/verify/${data.email}`);
+        }, 1500);
       })
       .catch((err) => {
         const axiosErr = err as AxiosError<ApiResponse>;
@@ -63,9 +66,6 @@ function page() {
       })
       .finally(() => {
         setIsLoading(false);
-        setTimeout(() => {
-          router.replace(`/verify/${data.email}`);
-        }, 1500);
       });
   };
 
