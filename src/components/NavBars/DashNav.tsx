@@ -69,7 +69,7 @@ function DashNav() {
           {navItemsForDesk.map((el, idx) => (
             <Link
               key={idx}
-              href="/all-session"
+              href={el.href}
               className="text-gray-400 hover:text-[#5B52EE] transition-all duration-200"
             >
               {el.label}

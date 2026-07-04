@@ -1,7 +1,6 @@
 import mongoose, { Document, ObjectId, Schema } from "mongoose";
 
-interface QuestionsIt extends Document {
-  id: string | ObjectId;
+export interface QuestionsIt extends Document {
   text: string;
   role: string;
   difficulty: string;
