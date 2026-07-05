@@ -54,8 +54,15 @@ function page() {
   }, [page]);
 
   useEffect(() => {
+    const searchParams = new URLSearchParams({
+      page: page.toString(),
+      role: role,
+      diff: diff,
+    });
+
+    const url = `/api/questions/get?${searchParams.toString()}`
     axios
-      .get(`/api/questions/get/${page}`)
+      .get(url)
       .then((res) => {
         setQuestions(res.data.questions);
         setPages(res.data.pages);
@@ -63,7 +70,7 @@ function page() {
       .catch((err) => {
         console.log(err);
       });
-  }, [page]);
+  }, [page, role, diff]);
 
   return (
     <div
@@ -126,7 +133,10 @@ function page() {
           ))}
       </div>
 
-      <div id="pagenation" className="flex justify-center pag-2 p-1 sticky bottom-0 bg-black/70 backdrop-blur">
+      <div
+        id="pagenation"
+        className="flex justify-center pag-2 p-1 sticky bottom-0 bg-black/70 backdrop-blur"
+      >
         <Button
           disabled={page == 1}
           className="cursor-pointer"
