@@ -2,7 +2,7 @@
 
 import { QuestionsIt } from "@/models/question.model";
 import axios from "axios";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Divide } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Span } from "next/dist/trace";
 
 const roleItems = [
   { label: "All Role", value: "all" },
@@ -60,7 +61,7 @@ function page() {
       diff: diff,
     });
 
-    const url = `/api/questions/get?${searchParams.toString()}`
+    const url = `/api/questions/get?${searchParams.toString()}`;
     axios
       .get(url)
       .then((res) => {
@@ -71,6 +72,8 @@ function page() {
         console.log(err);
       });
   }, [page, role, diff]);
+
+  console.log(questions);
 
   return (
     <div
@@ -86,7 +89,7 @@ function page() {
 
       <div
         id="filter"
-        className="flex justify-end gap-2 p-2 border-b border-[#343449]"
+        className="sticky top-12 backdrop-blur bg-black/40 flex justify-end gap-2 p-2 border-b border-[#343449]"
       >
         <Select value={role} onValueChange={setRole}>
           <SelectTrigger className="w-full max-w-48">
@@ -121,16 +124,19 @@ function page() {
         </Select>
       </div>
 
-      <div className="p-2 md:p-5 gap-3 flex flex-col">
-        {questions &&
-          questions.map((qs, idx) => (
+      <div id="questions" className="p-2 md:p-5 gap-4 flex flex-col">
+        {questions && questions.length > 0 ? (
+          questions.map((qs) => (
             <div
               key={qs._id.toString()}
               className="pb-4 border rounded-lg p-3 border-white/40 cursor-pointer hover:bg-[#464666] hover:scale-[1.01] transition-all duration-200"
             >
               {qs.text}
             </div>
-          ))}
+          ))
+        ) : (
+          <span className="text-center">Don't have question's for selected filter!!!</span>
+        )}
       </div>
 
       <div
