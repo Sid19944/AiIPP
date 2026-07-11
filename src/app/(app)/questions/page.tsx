@@ -2,37 +2,81 @@
 
 import { QuestionsIt } from "@/models/question.model";
 import axios from "axios";
-import { ArrowLeft, Divide } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Span } from "next/dist/trace";
 
 const roleItems = [
-  { label: "All Role", value: "all" },
-  { label: "Frontend", value: "frontend" },
-  { label: "Backend", value: "backend" },
-  { label: "Fullstack", value: "fullstack" },
-  { label: "System-Design", value: "system-design" },
-  { label: "DSA", value: "dsa" },
-  { label: "Devops", value: "devops" },
+  { label: "All", value: "all" },
+  {
+    label: "Frontend",
+    value: "frontend",
+    color: "#38BDF8",
+    bg: "rgba(56,189,248,0.08)",
+    border: "rgba(56,189,248,0.2)",
+  },
+  {
+    label: "Backend",
+    value: "backend",
+    color: "#34D399",
+    bg: "rgba(52,211,153,0.08)",
+    border: "rgba(52,211,153,0.2)",
+  },
+  {
+    label: "Fullstack",
+    value: "fullstack",
+    color: "#A78BFA",
+    bg: "rgba(167,139,250,0.08)",
+    border: "rgba(167,139,250,0.2)",
+  },
+  {
+    label: "System-Design",
+    value: "system-design",
+    color: "#F472B6",
+    bg: "rgba(244,114,182,0.08)",
+    border: "rgba(244,114,182,0.2)",
+  },
+  {
+    label: "DSA",
+    value: "dsa",
+    color: "#FB923C",
+    bg: "rgba(251,146,60,0.08)",
+    border: "rgba(251,146,60,0.2)",
+  },
+  {
+    label: "Devops",
+    value: "devops",
+    color: "#FBBF24",
+    bg: "rgba(251,191,36,0.08)",
+    border: "rgba(251,191,36,0.2)",
+  },
 ];
 
 const difficultyItems = [
-  { label: "All Difficulty", value: "all" },
-  { label: "Easy", value: "easy" },
-  { label: "Medium", value: "medium" },
-  { label: "Hard", value: "hard" },
+  { label: "All", value: "all" },
+  {
+    label: "Easy",
+    value: "easy",
+    color: "#34D399",
+    bg: "rgba(52,211,153,0.08)",
+    border: "rgba(52,211,153,0.2)",
+  },
+  {
+    label: "Medium",
+    value: "medium",
+    color: "#FB923C",
+    bg: "rgba(251,146,60,0.08)",
+    border: "rgba(251,146,60,0.2)",
+  },
+  {
+    label: "Hard",
+    value: "hard",
+    color: "#F472B6",
+    bg: "rgba(244,114,182,0.08)",
+    border: "rgba(244,114,182,0.2)",
+  },
 ];
 
 function page() {
@@ -73,8 +117,6 @@ function page() {
       });
   }, [page, role, diff]);
 
-  console.log(questions);
-
   return (
     <div
       className="min-h-screen bg-[#08080F] text-white"
@@ -87,88 +129,117 @@ function page() {
         </Link>
       </nav>
 
-      <div
-        id="filter"
-        className="sticky top-12 backdrop-blur bg-black/40 flex justify-end gap-2 p-2 border-b border-[#343449]"
-      >
-        <Select value={role} onValueChange={setRole}>
-          <SelectTrigger className="w-full max-w-48">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Fruits</SelectLabel>
-              {roleItems.map((item) => (
-                <SelectItem key={item.value} value={item.value}>
-                  {item.label}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-
-        <Select value={diff} onValueChange={setDiff}>
-          <SelectTrigger className="w-full max-w-48">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Fruits</SelectLabel>
-              {difficultyItems.map((item) => (
-                <SelectItem key={item.value} value={item.value}>
-                  {item.label}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div id="questions" className="p-2 md:p-5 gap-4 flex flex-col">
-        {questions && questions.length > 0 ? (
-          questions.map((qs) => (
-            <div
-              key={qs._id.toString()}
-              className="pb-4 border rounded-lg p-3 border-white/40 cursor-pointer hover:bg-[#464666] hover:scale-[1.01] transition-all duration-200"
-            >
-              {qs.text}
-            </div>
-          ))
-        ) : (
-          <span className="text-center">Don't have question's for selected filter!!!</span>
-        )}
-      </div>
-
-      <div
-        id="pagenation"
-        className="flex justify-center pag-2 p-1 sticky bottom-0 bg-black/70 backdrop-blur"
-      >
-        <Button
-          disabled={page == 1}
-          className="cursor-pointer"
-          onClick={() => setPage(Number(page) - 1)}
+      <div className="max-w-4xl m-auto">
+        <div
+          id="top"
+          className="flex justify-end gap-4 p-2 border-b border-[#343449] flex-col"
         >
-          prev
-        </Button>
-        <div className={`overflow-auto flex gap-1`}>
-          {Array.from({ length: pages }, (_, idx) => (
-            <div
-              key={idx}
-              ref={idx + 1 == page ? activeRef : null}
-              onClick={() => setPage(idx + 1)}
-              className={`border px-3 py-1 rounded-lg read-only cursor-pointer hover:bg-[#6d6bb6] hover:text-white ${idx + 1 == page ? "bg-[#6864F1] " : "border-gray-500 text-gray-500"}`}
+          <div
+            className="flex flex-col"
+            style={{ fontFamily: "'Roboto mono',monospace" }}
+          >
+            <h1
+              style={{
+                letterSpacing: "2px",
+              }}
+              className="font-extrabold text-[#a2a0ec]"
             >
-              {idx + 1}
-            </div>
-          ))}
+              QUESTION BANK
+            </h1>
+            <h1 className="text-xl md:text-3xl font-semibold">
+              <span>25 questions.</span>
+              <br />
+              <span className="text-[#726edf]">Practice until it clicks.</span>
+            </h1>
+            <p className="text-xs text-gray-500">
+              Browse by role, filter by difficulty, expand any question to see
+              what you shld cover.
+            </p>
+          </div>
+
+          <div id="roles" className="flex flex-wrap gap-2">
+            {roleItems.map((item) => (
+              <div
+                key={item.value}
+                onClick={() => setRole(item.value)}
+                className={`px-3 text-sm md:text-lg rounded-2xl cursor-pointer bg-gray-700 text-gray-400 border-gray-500 ${role == item.value && "border"}`}
+                style={{
+                  backgroundColor: role == item.value ? item.bg : "",
+                  borderColor: role == item.value ? item.border : "",
+                  color: role == item.value ? item.color : "",
+                }}
+              >
+                {item.label}
+              </div>
+            ))}
+          </div>
+
+          <div id="difficultys" className="flex flex-wrap gap-2">
+            {difficultyItems.map((item) => (
+              <div
+                key={item.value}
+                onClick={() => setDiff(item.value)}
+                className={`px-3 text-sm md:text-lg  rounded-2xl cursor-pointer bg-gray-700 text-gray-400 border-gray-500 ${diff == item.value && "border"}`}
+                style={{
+                  backgroundColor: diff == item.value ? item.bg : "",
+                  borderColor: diff == item.value ? item.border : "",
+                  color: diff == item.value ? item.color : "",
+                }}
+              >
+                {item.label}
+              </div>
+            ))}
+          </div>
         </div>
-        <Button
-          disabled={page == pages}
-          className="cursor-pointer"
-          onClick={() => setPage(Number(page) + 1)}
+
+        <div id="questions" className="p-2 md:p-5 gap-4 flex flex-col">
+          {questions && questions.length > 0 ? (
+            questions.map((qs) => (
+              <div
+                key={qs._id.toString()}
+                className="pb-4 border rounded-lg p-3 border-white/40 cursor-pointer hover:bg-[#464666] hover:scale-[1.01] transition-all duration-200"
+              >
+                {qs.text}
+              </div>
+            ))
+          ) : (
+            <span className="text-center">
+              Don't have question's for selected filter!!!
+            </span>
+          )}
+        </div>
+
+        <div
+          id="pagenation"
+          className="flex justify-center pag-2 p-1 sticky bottom-0 bg-black/70 backdrop-blur"
         >
-          next
-        </Button>
+          <Button
+            disabled={page == 1}
+            className="cursor-pointer"
+            onClick={() => setPage(Number(page) - 1)}
+          >
+            prev
+          </Button>
+          <div className={`overflow-auto flex gap-1`}>
+            {Array.from({ length: pages }, (_, idx) => (
+              <div
+                key={idx}
+                ref={idx + 1 == page ? activeRef : null}
+                onClick={() => setPage(idx + 1)}
+                className={`border px-3 py-1 rounded-lg read-only cursor-pointer hover:bg-[#6d6bb6] hover:text-white ${idx + 1 == page ? "bg-[#6864F1] " : "border-gray-500 text-gray-500"}`}
+              >
+                {idx + 1}
+              </div>
+            ))}
+          </div>
+          <Button
+            disabled={page == pages}
+            className="cursor-pointer"
+            onClick={() => setPage(Number(page) + 1)}
+          >
+            next
+          </Button>
+        </div>
       </div>
     </div>
   );
