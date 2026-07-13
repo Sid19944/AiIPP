@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 
 const roleItems = [
   { label: "All", value: "all" },
@@ -83,6 +84,7 @@ function page() {
   const [questions, setQuestions] = useState<QuestionsIt[] | undefined>(
     undefined,
   );
+  const [qsAttends, setQsAttends] = useState<string[] | null | undefined>(null);
 
   const [role, setRole] = useState("all");
   const [diff, setDiff] = useState("all");
@@ -90,6 +92,38 @@ function page() {
   const [page, setPage] = useState<number>(1);
   const [pages, setPages] = useState<number>(1);
   const activeRef = useRef<HTMLDivElement>(null);
+
+  const updateQsAttend = async (qsId: string) => {
+    axios
+      .post(`/api/qsattend/mark-unmark`, {
+        qs: qsId,
+      })
+      .then((res) => {
+        toast.success(res.data.message);
+        getQsAttendsData();
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error(err.response?.data?.message || err.response.message);
+      });
+  };
+
+  const getQsAttendsData = () => {
+    axios
+      .get("/api/qsattend/get")
+      .then((res) => {
+        setQsAttends(res.data.qsAttends);
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error(err.response?.data?.message || err.response.message);
+      });
+  };
+
+  useEffect(() => {
+    getQsAttendsData();
+  }, []);
+
   useEffect(() => {
     activeRef.current?.scrollIntoView({
       behavior: "smooth",
@@ -114,9 +148,9 @@ function page() {
       })
       .catch((err) => {
         console.log(err);
+        toast.error(err.response?.data?.message || err.response.message);
       });
   }, [page, role, diff]);
-
   return (
     <div
       className="min-h-screen bg-[#08080F] text-white"
@@ -147,7 +181,7 @@ function page() {
               QUESTION BANK
             </h1>
             <h1 className="text-xl md:text-3xl font-semibold">
-              <span>25 questions.</span>
+              <span>{questions?.length} questions.</span>
               <br />
               <span className="text-[#726edf]">Practice until it clicks.</span>
             </h1>
@@ -192,14 +226,21 @@ function page() {
           </div>
         </div>
 
-        <div id="questions" className="p-2 md:p-5 gap-4 flex flex-col">
+        <div id="questions" className="mt-2 gap-4 flex flex-col p-1">
           {questions && questions.length > 0 ? (
             questions.map((qs) => (
               <div
                 key={qs._id.toString()}
-                className="pb-4 border rounded-lg p-3 border-white/40 cursor-pointer hover:bg-[#464666] hover:scale-[1.01] transition-all duration-200"
+                className="flex gap-1 text-sm pb-4 border rounded-lg p-3 bg-white/6 border-white/40 cursor-pointer hover:bg-[#464666] hover:scale-[1.01] transition-all duration-200"
               >
-                {qs.text}
+                <input
+                  type="checkbox"
+                  checked={qsAttends?.includes(String(qs._id)) || false}
+                  onChange={() => {
+                    updateQsAttend(String(qs._id));
+                  }}
+                />
+                <p>{qs.text}</p>
               </div>
             ))
           ) : (
