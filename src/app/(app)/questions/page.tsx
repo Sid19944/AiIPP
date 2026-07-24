@@ -2,7 +2,7 @@
 
 import { QuestionsIt } from "@/models/question.model";
 import axios from "axios";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -81,6 +81,7 @@ const difficultyItems = [
 ];
 
 function page() {
+  const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState<QuestionsIt[] | undefined>(
     undefined,
   );
@@ -143,14 +144,19 @@ function page() {
     axios
       .get(url)
       .then((res) => {
+        setLoading(true);
         setQuestions(res.data.questions);
         setPages(res.data.pages);
       })
       .catch((err) => {
         console.log(err);
         toast.error(err.response?.data?.message || err.response.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, [page, role, diff]);
+
   return (
     <div
       className="min-h-screen bg-[#08080F] text-white"
@@ -227,6 +233,11 @@ function page() {
         </div>
 
         <div id="questions" className="mt-2 gap-4 flex flex-col p-1">
+          {loading && (
+            <span className="flex flex-col items-center">
+              <Loader2 className="animate-spin" /> Loading...
+            </span>
+          )}
           {questions && questions.length > 0 ? (
             questions.map((qs) => (
               <div
@@ -244,7 +255,7 @@ function page() {
               </div>
             ))
           ) : (
-            <span className="text-center">
+            <span className="border flex flex-col items-center gap-1">
               Don't have question's for selected filter!!!
             </span>
           )}
