@@ -9,6 +9,27 @@ export async function SendVerificationEmail(
   verifiyCode: number,
 ): Promise<emailType> {
   try {
+    const repo1 = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "api-key": process.env.BREVO_API_KEY!,
+      },
+      body: JSON.stringify({
+        sender: {
+          email: process.env.BREVO_SENDER_EMAIL,
+          name: process.env.BREVO_SENDER_NAME,
+        },
+        to: [{ email }],
+        subject: "Verification Code",
+        htmlContent: `...`,
+      }),
+    });
+
+    const data = await repo1.json();
+    console.log("STATUS:", repo1.status);
+    console.log("BODY:", JSON.stringify(data, null, 2));
+
     const repo = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
@@ -17,8 +38,8 @@ export async function SendVerificationEmail(
       },
       body: JSON.stringify({
         sender: {
-          email: process.env.BRROVO_SENDER_EMAIL,
-          name: process.env.BREBO_SENDER_NAME,
+          email: process.env.BROVO_SENDER_EMAIL,
+          name: process.env.BREVO_SENDER_NAME,
         },
         to: [{ email }],
         subject: "Verification Code",
@@ -45,6 +66,8 @@ export async function SendVerificationEmail(
                 `,
       }),
     });
+
+    console.log(repo);
 
     if (!repo.ok) {
       return {
