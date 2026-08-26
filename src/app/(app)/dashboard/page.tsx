@@ -175,7 +175,7 @@ function page() {
       <DashNav />
 
       <main className="flex-1 p-2 md:p-6 space-y-6 overflow-y-auto">
-        {/* <div id="stats" className="grid grid-cols-2 bg-[#08080F] lg:grid-cols-4 gap-4" style={{width:"100%", height:"100%"}}>
+        <div id="stats" className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             delay={0}
             label="Total sessions"
@@ -208,7 +208,7 @@ function page() {
             icon={Award}
             color="#FF6B6B"
           />
-        </div> */}
+        </div>
 
         <div className="grid gap-4 lg:grid-cols-4">
           <ScoreChart

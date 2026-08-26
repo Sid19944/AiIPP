@@ -15,9 +15,19 @@ function StatCard({ label, value, icon: Icon, sub, color, delay }: any) {
       initial="hidden"
       animate={inView ? "visible" : "hidden"}
       className="bg-[#0D0D14] border text-gray-600 group border-white/5 rounded-2xl p-5 relative overflow-hidden group"
+      style={{
+        isolation: "isolate",
+        transform: "translateZ(0)",
+        WebkitTransform: "translateZ(0)",
+        willChange: "transform",
+      }}
     >
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" 
-      style={{background : `radial-gradient(circle at 80% 20%, ${color}12, transparent 60%)`}}/>
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background: `radial-gradient(circle at 80% 20%, ${color}12, transparent 60%)`,
+        }}
+      />
       <div className="flex items-start justify-between mb-4">
         <div
           className="w-9 h-9 rounded-xl flex items-center justify-center"
